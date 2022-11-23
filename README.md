@@ -27,14 +27,14 @@ disposer.dispose();
 ```ts
 import { PUmlExtension } from '@sinm/monaco-plantuml';
 // relative
-const worker = new Worker(new URL('../node_modules/@sinm/monaco-plantuml/worker.js', import.meta.url));
+const worker = new Worker(new URL('../node_modules/@sinm/monaco-plantuml/lib/puml.worker.js', import.meta.url));
 const extension = new PUmlExtension(worker);
 ```
 
 2. vite
 ```ts
 import { PUmlExtension } from '@sinm/monaco-plantuml';
-import PUmlWorker from '@sinm/monaco-plantuml/worker?worker';
+import PUmlWorker from '@sinm/monaco-plantuml/lib/puml.worker?worker';
 // relative
 const worker = new PUmlWorker();
 const extension = new PUmlExtension(worker);

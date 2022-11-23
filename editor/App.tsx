@@ -12,7 +12,7 @@ function App() {
       language: "plantuml",
     });
     const worker = new Worker(
-      new URL("../src/worker/index.ts", import.meta.url)
+      new URL("../src/puml.worker.ts", import.meta.url)
     );
     const extension = new PUmlExtension(worker);
     const disposer = extension.active(editor);

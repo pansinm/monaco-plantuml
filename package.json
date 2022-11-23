@@ -35,6 +35,7 @@
     "webpack-dev-server": "^4.11.1"
   },
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "start": "webpack serve"
   }
 }

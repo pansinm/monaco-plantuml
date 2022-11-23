@@ -1,5 +1,5 @@
-import pumlService from '../service';
-import stdlib from '../service/stdlib';
+import pumlService from './service';
+import stdlib from './service/stdlib';
 
 stdlib.resolve();
 
