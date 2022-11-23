@@ -37,5 +37,14 @@
   "scripts": {
     "test": "jest",
     "start": "webpack serve"
-  }
+  },
+  "publishConfig": {
+    "repository": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "files": [
+    "src",
+    "lib",
+    "screenshot.gif"
+  ]
 }
