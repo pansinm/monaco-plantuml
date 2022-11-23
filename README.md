@@ -3,6 +3,8 @@
 PlantUML extension for monaco editor with better intellisense
 ![](./screenshot.gif)
 
+[Online Demo](https://pansinm.github.io/monaco-plantuml/)
+
 ## Installation
 
 ```bash
