@@ -1,6 +1,6 @@
-import type * as monaco from "monaco-editor";
 import { parse, traverse } from "../parser/parser";
 import type {
+  CallExpression,
   DefineLongStatement,
   DefineStatement,
   FunctionDeclaration,
@@ -42,7 +42,9 @@ class PUmlFile {
 
   includes: Record<string, PUmlFile> = {};
 
-  variables: VariableDeclaration[] = [];
+  globalVariables: VariableDeclaration[] = [];
+
+  localVariables: VariableDeclaration[] = [];
 
   callableNodes: CallableNode[] = [];
 
@@ -66,17 +68,15 @@ class PUmlFile {
     return nodes;
   }
 
-  allVariableNodes() {
-    const nodes = [...this.variables];
+  allGlobalVariableNodes() {
+    const nodes = [...this.globalVariables];
     for (const include of Object.values(this.includes)) {
-      nodes.push(...include.allVariableNodes());
+      nodes.push(...include.allGlobalVariableNodes());
     }
     return nodes;
   }
 
-  findCallableNode(
-    callableName: string
-  ): CallableNode | undefined {
+  findCallableNode(callableName: string): CallableNode | undefined {
     let node = this.callableNodes.find((n) => n.name.name === callableName);
     if (node) {
       return node;
@@ -95,16 +95,32 @@ class PUmlFile {
     return callable?.arguments || [];
   }
 
+  localSymbols() {
+    const symbols = this.localVariables.map((n) => n.name.name);
+    traverse(this.ast, {
+      CallExpression: (node: CallExpression) => {
+        node.args.forEach((arg) => {
+          if (arg.type === "Identifier") {
+            symbols.push(arg.name);
+          }
+        });
+      },
+    });
+    return symbols;
+  }
+
   async parse() {
     await stdlib.resolve();
-    if (this.callableNodes.length || this.variables.length) {
+    if (this.callableNodes.length || this.globalVariables.length) {
       return;
     }
     const includes: IncludeStatement[] = [];
     traverse(this.ast, {
       VariableDeclaration: (node: VariableDeclaration) => {
         if (node.scope === "global") {
-          this.variables.push(node);
+          this.globalVariables.push(node);
+        } else {
+          this.localVariables.push(node);
         }
       },
       FunctionDeclaration: (node: FunctionDeclaration) => {
@@ -123,14 +139,14 @@ class PUmlFile {
         if (node.arguments) {
           this.callableNodes.push(node as any);
         } else {
-          this.variables.push(node as any);
+          this.globalVariables.push(node as any);
         }
       },
       DefineLongStatement: (node: DefineLongStatement) => {
         if (node.arguments) {
           this.callableNodes.push(node as any);
         } else {
-          this.variables.push(node as any);
+          this.globalVariables.push(node as any);
         }
       },
     });

@@ -1,14 +1,14 @@
-import * as monaco from 'monaco-editor';
-import type { PUmlService } from '../service';
-import { call } from '../worker/ipc';
+import * as monaco from "monaco-editor";
+import type { PUmlService } from "../service";
+import { getFenceContent } from "./utils";
 
 export class PumlSignatureHelpProvider
   implements monaco.languages.SignatureHelpProvider
 {
-  signatureHelpTriggerCharacters?: readonly string[] | undefined = ['('];
-  signatureHelpRetriggerCharacters?: readonly string[] | undefined = [','];
+  signatureHelpTriggerCharacters?: readonly string[] | undefined = ["(", ","];
+  signatureHelpRetriggerCharacters?: readonly string[] | undefined = [","];
 
-  service: PUmlService
+  service: PUmlService;
   constructor(service: PUmlService) {
     this.service = service;
   }
@@ -17,41 +17,46 @@ export class PumlSignatureHelpProvider
     model: monaco.editor.ITextModel,
     position: monaco.Position,
     token: monaco.CancellationToken,
-    context: monaco.languages.SignatureHelpContext,
+    context: monaco.languages.SignatureHelpContext
   ): Promise<monaco.languages.SignatureHelpResult | null | undefined> {
-    const range = new monaco.Range(1, 1, position.lineNumber, position.column);
-    const textBefore = model.getValueInRange(range);
-    const start = textBefore.lastIndexOf('```plantuml');
-    const text = model.getValue();
-    let fence = text.slice(start);
-    fence = fence.slice(0, fence.indexOf('```\n'));
-    fence = fence.replace(/```plantuml.*?\n/, '');
+    const fence =
+      model.getLanguageId() === "markdown"
+        ? getFenceContent(model, position)
+        : model.getValue();
+
     const lineTextBefore = model
       .getLineContent(position.lineNumber)
       .slice(0, position.column - 1);
-    const res = /([$a-zA-Z0-9_]+?)\([^)]*$/.exec(lineTextBefore);
+    const res = /([$a-zA-Z0-9_]+?)\(([^)]*)$/.exec(lineTextBefore);
     const name = res?.[1];
+    const params = res?.[2];
     const node = name && (await this.service.findCallableNode(fence, name));
     if (node) {
+      const activeIndex = (params?.split(",").length || 1) - 1;
       const parameters = node.arguments.map((arg: any) => ({
         label: arg.name.name,
-        documentation: `${node.name.name}(${node.arguments
-          .map(
-            (arg: any) =>
-              `${arg.name.name}${arg.init ? (arg.init as any).text : ''}`,
-          )
-          .join(', ')})`,
+        documentation: {
+          value: `${node.name.name}(${node.arguments
+            .map((arg, index) => {
+              console.log(arg.init)
+              const text = `${arg.name.name}${
+                arg.init ? "=" + JSON.stringify((arg.init as any).text) : ""
+              }`;
+              return index === activeIndex ? `**${text}**` : text;
+            })
+            .join(", ")})`,
+        },
       }));
 
       return {
         value: {
-          activeParameter: 0,
+          activeParameter: activeIndex,
           activeSignature: 0,
           signatures: [
             {
               label: node.name.name,
               parameters: parameters,
-              activeParameter: 0,
+              activeParameter: activeIndex,
             },
           ],
         },

@@ -1,6 +1,10 @@
 import * as monaco from "monaco-editor";
-import { findPreviousMatch, getFenceContent, isInFence } from "./utils";
-import { call } from "../worker/ipc";
+import {
+  findPreviousMatch,
+  getFenceContent,
+  isInFence,
+  parseCallExpression,
+} from "./utils";
 import { allkeywords, preprocessor } from "./hightlight";
 import { preprocessSnippets } from "./snippets";
 import type { PUmlService } from "../service";
@@ -186,33 +190,9 @@ class UMLCompletionItemProvider
       return this.completeTheme(model, position);
     }
 
-    const fence = getFenceContent(model, position);
-
-    const res = /([$a-zA-Z0-9_]+?)\(/.exec(lineTextBefore);
-    if (res) {
-      let startIndex = lineTextBefore.lastIndexOf("(");
-      const cIndex = lineTextBefore.lastIndexOf(",");
-      if (cIndex > startIndex) {
-        startIndex = cIndex;
-      }
-      const r = new monaco.Range(
-        position.lineNumber,
-        startIndex + 2,
-        position.lineNumber,
-        position.column
-      );
-      return this.service.findCallableNode(fence, res[1]).then((node) => {
-        return {
-          suggestions:
-            node?.arguments.map((arg) => ({
-              kind: monaco.languages.CompletionItemKind.Field,
-              insertText: arg.name.name + "=",
-              label: arg.name.name,
-              range: r,
-            })) || [],
-        };
-      });
-    }
+    const fence = isMarkdown
+      ? getFenceContent(model, position)
+      : model.getValue();
 
     if (/^\s*![^\s]*/.test(lineTextBefore)) {
       return { suggestions: this.preprocessorItems(lineTextBefore, position) };
@@ -224,6 +204,22 @@ class UMLCompletionItemProvider
       position.lineNumber,
       position.column
     );
+
+    const callExp = parseCallExpression(lineTextBefore);
+    if (callExp) {
+      const symbols = await this.service.localSymbols(fence);
+      return {
+        suggestions: symbols
+          .filter((s) => !callExp.params.includes(s))
+          .map((name) => ({
+            kind: monaco.languages.CompletionItemKind.Variable,
+            insertText: name,
+            label: name,
+            range: r,
+          })),
+      };
+    }
+
     const keywords = allkeywords.map((kw) => ({
       kind: monaco.languages.CompletionItemKind.Keyword,
       insertText: kw,

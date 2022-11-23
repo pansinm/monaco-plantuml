@@ -1,8 +1,9 @@
 {
   "name": "@sinm/monaco-plantuml",
   "version": "0.1.0",
-  "description": "plantuml extension for monaco-editor",
-  "main": "index.js",
+  "description": "PlantUML extension for monaco editor with better intellisense",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "author": "pansinm <pansinm@foxmail.com>",
   "license": "MIT",
   "dependencies": {
@@ -14,14 +15,24 @@
     "@types/jest": "^29.2.3",
     "@types/lodash": "^4.14.189",
     "@types/node-fetch": "2",
+    "@types/react": "^18.0.25",
+    "@types/react-dom": "^18.0.9",
+    "css-loader": "^6.7.2",
+    "html-webpack-plugin": "^5.5.0",
     "jest": "^29.3.1",
     "jest-environment-jsdom": "^29.3.1",
     "node-fetch": "2",
+    "plantuml-encoder": "^1.4.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "style-loader": "^3.3.1",
     "ts-jest": "^29.0.3",
+    "ts-loader": "^9.4.1",
     "ts-node": "^10.9.1",
     "typescript": "^4.9.3",
     "webpack": "^5.75.0",
-    "webpack-cli": "^5.0.0"
+    "webpack-cli": "^5.0.0",
+    "webpack-dev-server": "^4.11.1"
   },
   "scripts": {
     "test": "jest"

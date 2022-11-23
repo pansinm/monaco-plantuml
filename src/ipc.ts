@@ -1,5 +1,5 @@
 import uniqueId from "lodash/uniqueId";
-import { PUmlService } from "../service";
+import { PUmlService } from "./service";
 
 export function call<T extends keyof PUmlService>(
   worker: Worker,

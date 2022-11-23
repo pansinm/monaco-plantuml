@@ -4,17 +4,20 @@ class Stdlib {
 
   getModule(name: string) {
     return this.modules.find(
-      (module) => module.path === name || module.path === name + '.puml',
+      (module) => module.path === name || module.path === name + ".puml"
     );
   }
-
-  async resolve(): Promise<typeof this.modules> {
-    if (this.modules.length || this.loading) {
+  private resolves: ((modules: Stdlib["modules"]) => void)[] = [];
+  async resolve(): Promise<Stdlib["modules"]> {
+    if (this.modules.length) {
       return this.modules;
+    }
+    if (this.loading) {
+      return new Promise((resolve) => this.resolves.push(resolve));
     }
     this.loading = true;
     return fetch(
-      'https://api.github.com/repos/plantuml/plantuml-stdlib/git/trees/master?recursive=10',
+      "https://api.github.com/repos/plantuml/plantuml-stdlib/git/trees/master?recursive=10"
     )
       .then((res) => res.json())
       .then((body) => {
@@ -22,6 +25,8 @@ class Stdlib {
         return this.modules;
       })
       .finally(() => {
+        this.resolves.forEach((resolve) => resolve(this.modules));
+        this.resolves = [];
         this.loading = false;
       });
   }

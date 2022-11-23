@@ -7,7 +7,6 @@ import {
   isInFence,
   isPositionMatch,
   isTextMatch,
-  toggleTask,
 } from '../utils';
 
 const md = `
@@ -183,11 +182,3 @@ describe('findPreviousMatchRange', () => {
   });
 });
 
-describe('toggleTask', () => {
-  it('toggle task line', () => {
-    expect(toggleTask('- [ ] task')).toBe('- [x] task');
-  });
-  it('toggle normal lne', () => {
-    expect(toggleTask('- task')).toBe('- task');
-  });
-});

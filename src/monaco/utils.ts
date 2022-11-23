@@ -1,5 +1,5 @@
-import { findLastIndex } from 'lodash';
-import * as monaco from 'monaco-editor';
+import { findLastIndex } from "lodash";
+import * as monaco from "monaco-editor";
 
 type Matcher = RegExp | string | ((text: string) => boolean);
 
@@ -12,14 +12,14 @@ export function getCurrentRange(editor: monaco.editor.ICodeEditor) {
       startLineNumber,
       startColumn,
       endLineNumber,
-      endColumn,
+      endColumn
     );
   }
   return undefined;
 }
 
 export function isTextMatch(text: string, matcher: Matcher) {
-  if (typeof matcher === 'string') {
+  if (typeof matcher === "string") {
     return text.includes(matcher);
   }
   if (matcher instanceof RegExp) {
@@ -30,27 +30,27 @@ export function isTextMatch(text: string, matcher: Matcher) {
 
 export function getTextBefore(
   model: monaco.editor.ITextModel,
-  position: monaco.Position,
+  position: monaco.Position
 ) {
   const beforeRange = new monaco.Range(
     1,
     1,
     position.lineNumber,
-    position.column,
+    position.column
   );
   return model.getValueInRange(beforeRange);
 }
 
 export function getTextAfter(
   model: monaco.editor.ITextModel,
-  position: monaco.Position,
+  position: monaco.Position
 ) {
   const modelRange = model.getFullModelRange();
   const afterRange = new monaco.Range(
     position.lineNumber,
     position.column,
     modelRange.endLineNumber,
-    modelRange.endColumn,
+    modelRange.endColumn
   );
   return model.getValueInRange(afterRange);
 }
@@ -58,7 +58,7 @@ export function getTextAfter(
 export function isPositionMatch(
   model: monaco.editor.ITextModel,
   position: monaco.Position,
-  [beforeMather, afterMatcher]: [Matcher, Matcher],
+  [beforeMather, afterMatcher]: [Matcher, Matcher]
 ) {
   const beforeText = getTextBefore(model, position);
   const afterText = getTextAfter(model, position);
@@ -71,17 +71,17 @@ export function isPositionMatch(
 export function isInFence(
   model: monaco.editor.ITextModel,
   position: monaco.Position,
-  lang: string,
+  lang: string
 ) {
   const prev = model.findPreviousMatch(
-    '```',
+    "```",
     position,
     false,
     true,
     null,
-    false,
+    false
   );
-  const next = model.findNextMatch('```', position, false, true, null, false);
+  const next = model.findNextMatch("```", position, false, true, null, false);
   const openLine = prev?.range.startLineNumber;
   const closeLine = next?.range.startLineNumber;
   if (openLine && closeLine) {
@@ -92,7 +92,7 @@ export function isInFence(
     }
 
     return (
-      firstLine.trim().startsWith('```' + lang) && lastLine.trim() === '```'
+      firstLine.trim().startsWith("```" + lang) && lastLine.trim() === "```"
     );
   }
   return false;
@@ -100,16 +100,16 @@ export function isInFence(
 
 export function getFenceContent(
   model: monaco.editor.ITextModel,
-  position: monaco.Position,
+  position: monaco.Position
 ) {
   const beforeText = getTextBefore(model, position);
   const afterText = getTextAfter(model, position);
-  const beforeIndex = beforeText.lastIndexOf('```');
-  const afterIndex = afterText.indexOf('```');
+  const beforeIndex = beforeText.lastIndexOf("```");
+  const afterIndex = afterText.indexOf("```");
   return (
     beforeText
       .slice(beforeIndex)
-      .replace(/```.*?\n/, '')
+      .replace(/```.*?\n/, "")
       .trimStart() + afterText.slice(0, afterIndex).trimEnd()
   );
 }
@@ -117,7 +117,7 @@ export function getFenceContent(
 export function findPreviousMatch(
   model: monaco.editor.ITextModel,
   position: monaco.Position,
-  searchString: string | RegExp,
+  searchString: string | RegExp
 ) {
   const isReg = searchString instanceof RegExp;
   const match = model.findPreviousMatch(
@@ -126,17 +126,19 @@ export function findPreviousMatch(
     isReg,
     true,
     null,
-    false,
+    false
   );
   return match;
 }
 
-export function toggleTask(line: string) {
-  return line.replace(/^\s*[-*+] \[(x|\s)\]/, (substr, arg) => {
-    if (arg === 'x') {
-      return substr.replace('[x]', '[ ]');
-    } else {
-      return substr.replace('[ ]', '[x]');
-    }
-  });
+export function parseCallExpression(lineTextBefore: string) {
+  const reg = /([$a-zA-Z0-9_]+?)\(([^)]*)$/;
+  const res = reg.exec(lineTextBefore);
+  if (!res) {
+    return null;
+  }
+  return {
+    name: res[1],
+    params: res[2].split(",").map((item) => item.trim()),
+  };
 }
