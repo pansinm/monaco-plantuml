@@ -1,11 +1,17 @@
 import * as monaco from 'monaco-editor';
-import { call } from './callWorker';
+import type { PUmlService } from '../service';
+import { call } from '../worker/ipc';
 
-class PumlSignatureHelpProvider
+export class PumlSignatureHelpProvider
   implements monaco.languages.SignatureHelpProvider
 {
   signatureHelpTriggerCharacters?: readonly string[] | undefined = ['('];
   signatureHelpRetriggerCharacters?: readonly string[] | undefined = [','];
+
+  service: PUmlService
+  constructor(service: PUmlService) {
+    this.service = service;
+  }
 
   async provideSignatureHelp(
     model: monaco.editor.ITextModel,
@@ -25,7 +31,7 @@ class PumlSignatureHelpProvider
       .slice(0, position.column - 1);
     const res = /([$a-zA-Z0-9_]+?)\([^)]*$/.exec(lineTextBefore);
     const name = res?.[1];
-    const node = name && ((await call('callable', fence, name)) as any);
+    const node = name && (await this.service.findCallableNode(fence, name));
     if (node) {
       const parameters = node.arguments.map((arg: any) => ({
         label: arg.name.name,
@@ -56,8 +62,3 @@ class PumlSignatureHelpProvider
     }
   }
 }
-
-monaco.languages.registerSignatureHelpProvider(
-  'markdown',
-  new PumlSignatureHelpProvider(),
-);

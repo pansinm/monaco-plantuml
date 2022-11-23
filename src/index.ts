@@ -1,0 +1,1 @@
+export { default as PUmlExtension } from './monaco/PUmlExtension'
