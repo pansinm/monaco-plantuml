@@ -17,6 +17,7 @@ const def = String.raw`
       | ReturnStatement
       | ExpressionStatement
       | UnknownStatement
+      | UMLSpriteStatement
       | umlStatement
 
     variableDeclaration = "!" globalVar? identifier wsAroundOptional<"="> expression &le
@@ -70,7 +71,20 @@ const def = String.raw`
     // TODO
     UnknownStatement = "!" ("log" | "assert" | "themes" | "dump_memory" | "import") #notnl*
 
+    UMLSpriteStatement = 
+      | "sprite" identifier Svg --svg
+      | "sprite" identifier spriteSpec? "{" spriteLine+  "}" --block
+      | "sprite" identifier spriteSpec? spriteLine --inline
+    spriteSpec = "[" spriteChar+ "]"
+    spriteLine = spriteChar+
+    spriteChar = ~("{" | "}" | "[" | "]" | "<" | ">" | nl ) any
+
+    Svg = "<svg" tagC* ">" tag+ "</svg>"
+    tag = ~("</svg>") "<" tagC+ ">" 
+    tagC = ~("<" | ">") any
+
     umlStatement = ~("!" any+)  notnl+ &le
+    umlLine = ~("!" any+)  notnl+ &le
 
     ExpressionStatement =
      | #callExpression

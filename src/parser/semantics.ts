@@ -20,6 +20,7 @@ import type {
   ReturnStatement,
   Root,
   StringLiteral,
+  UMLSpriteStatement,
   UmlText,
   UnknownStatement,
   VariableDeclaration,
@@ -200,6 +201,30 @@ semantics.addOperation('toTree', {
       text: this.sourceString,
       pos: getPos(this),
     };
+  },
+  UMLSpriteStatement_block(_1, identifier, spec, _4, _5, _6): UMLSpriteStatement {
+    return {
+      type: 'UMLSpriteStatement',
+      name: identifier.toTree(),
+      spec: spec.child(0) ? spec.child(0).child(1).sourceString : undefined,
+      pos: getPos(this)
+    }
+  },
+  UMLSpriteStatement_svg(_1, identifier, _3): UMLSpriteStatement {
+    return {
+      type: 'UMLSpriteStatement',
+      name: identifier.toTree(),
+      // spec: spec.sourceString,
+      pos: getPos(this)
+    }
+  },
+  UMLSpriteStatement_inline(_1, identifier, spec, _4): UMLSpriteStatement {
+    return {
+      type: 'UMLSpriteStatement',
+      name: identifier.toTree(),
+      spec: spec.child(0) ? spec.child(0).child(1).sourceString : undefined,
+      pos: getPos(this)
+    }
   },
   umlStatement(uml, _): UmlText {
     return {

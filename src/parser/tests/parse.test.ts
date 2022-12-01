@@ -1,4 +1,5 @@
 import { parse } from '../parser';
+import { UMLSpriteStatement } from '../PreprocessorAst';
 
 it('定义变量', () => {
   const input = String.raw`@startuml
@@ -1396,3 +1397,38 @@ rectangle "==e_label\n<color:e_color><$e_sprite></color>\n//<size:TECHN_FONT_SIZ
   };
   expect(parse(input)).toEqual(output);
 });
+
+it('UMLSpriteStatement', () => {
+  const input = String.raw`
+ sprite $bug [15x15/16z] PKzR2i0m2BFMi15p__FEjQEqB1z27aeqCqixa8S4OT7C53cKpsHpaYPDJY_12MHM-BLRyywPhrrlw3qumqNThmXgd1TOterAZmOW8sgiJafogofWRwtV3nCF
+ sprite $printer [15x15/8z] NOtH3W0W208HxFz_kMAhj7lHWpa1XC716sz0Pq4MVPEWfBHIuxP3L6kbTcizR8tAhzaqFvXwvFfPEqm0
+ sprite $disk {
+   444445566677881
+   436000000009991
+   43600000000ACA1
+   53700000001A7A1
+   53700000012B8A1
+   53800000123B8A1
+   63800001233C9A1
+   634999AABBC99B1
+   744566778899AB1
+   7456AAAAA99AAB1
+   8566AFC228AABB1
+   8567AC8118BBBB1
+   867BD4433BBBBB1
+   39AAAAABBBBBBC1
+}
+sprite foo1 <svg viewBox="0 0 36 36">
+<path fill="#77B255" d="M36 32c0 2.209-1.791 4-4 4H4c-2.209 0-4-1.791-4-4V4c0-2.209 1.791-4 4-4h28c2.209 0 4 1.791 4 4v28z"/>
+<path fill="#FFF" d="M21.529 18.006l8.238-8.238c.977-.976.977-2.559 0-3.535-.977-.977-2.559-.977-3.535 0l-8.238 8.238-8.238-8.238c-.976-.977-2.56-.977-3.535 0-.977.976-.977 2.559 0 3.535l8.238 8.238-8.258 8.258c-.977.977-.977 2.559 0 3.535.488.488 1.128.732 1.768.732s1.28-.244 1.768-.732l8.258-8.259 8.238 8.238c.488.488 1.128.732 1.768.732s1.279-.244 1.768-.732c.977-.977.977-2.559 0-3.535l-8.24-8.237z"/>
+</svg>
+  `
+  const {children} = parse(input);
+  console.log(children)
+  expect(children.length).toBe(4);
+  expect(children.map((statement) => {
+    const s = statement as unknown as UMLSpriteStatement;
+    return s.name.name
+  })).toEqual(['$bug', '$printer', '$disk', 'foo1'])
+  expect(children[0]).toHaveProperty('spec', '15x15/16z')
+})

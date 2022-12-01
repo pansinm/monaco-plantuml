@@ -117,6 +117,12 @@ export interface WhileStatement extends Position {
   statements: Statement[];
 }
 
+export interface UMLSpriteStatement extends Position {
+  type: 'UMLSpriteStatement';
+  name: Identifier;
+  spec?: string;
+}
+
 export interface NumberLiteral extends Position {
   type: 'NumberLiteral';
   text: string;

@@ -3,7 +3,7 @@ import type { Root } from './PreprocessorAst';
 import semantics from './semantics';
 // import * as fs from 'fs';
 
-export function parse(input: string) {
+export function parse(input: string): Root {
   // const t = grammar.trace(input).toString();
   // console.log(t);
   // fs.writeFileSync('a.txt', t);
