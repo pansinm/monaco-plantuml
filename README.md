@@ -1,6 +1,7 @@
 # monaco-plantuml
 
-PlantUML extension for monaco editor with better intellisense
+monaco editor extension for PlantUML with better intellisense
+
 ![](./screenshot.gif)
 
 [Online Demo](https://pansinm.github.io/monaco-plantuml/)
