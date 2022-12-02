@@ -174,3 +174,13 @@ export function getPlantUMLContent(model: monaco.editor.ITextModel, position: mo
   }
   throw new Error('Not plantuml');
 }
+
+export function alphabet(from: string, to: string) {
+  const charF = from.charCodeAt(0);
+  const charT = to.charCodeAt(0);
+  const arr: string[] = [];
+  for (let char = charF; char <= charT; char++) {
+    arr.push(String.fromCharCode(char));
+  }
+  return arr;
+}

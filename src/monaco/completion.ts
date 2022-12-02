@@ -1,5 +1,6 @@
 import * as monaco from "monaco-editor";
 import {
+  alphabet,
   findPreviousMatch,
   getFenceContent,
   getLineTextBefore,
@@ -11,16 +12,6 @@ import { preprocessSnippets } from "./snippets";
 import type { PUmlService } from "../service";
 import NormalSpriteCompletion from "./completion/NormalSpriteCompletion";
 import CallableSpriteCompletion from "./completion/CallableSpriteCompletion";
-
-function alphabet(from: string, to: string) {
-  const charF = from.charCodeAt(0);
-  const charT = from.charCodeAt(0);
-  const arr: string[] = [];
-  for (let char = charF; char <= charT; char++) {
-    arr.push(String.fromCharCode(char));
-  }
-  return arr;
-}
 
 const ALL_THEMES = [
   "_none_",

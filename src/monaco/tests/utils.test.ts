@@ -1,5 +1,6 @@
 import * as monaco from "monaco-editor";
 import {
+  alphabet,
   findPreviousMatch,
   getFenceContent,
   getLineTextBefore,
@@ -202,3 +203,10 @@ describe("getLineTextBefore", () => {
     expect(getLineTextBefore(model, new monaco.Position(4, 10))).toBe("    const");
   });
 });
+
+
+describe('alphabet', ()=> {
+  it('alphabet a to z', () => {
+    expect(alphabet('a', 'z').length).toBe(26)
+  })
+})
