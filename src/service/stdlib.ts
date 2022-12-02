@@ -21,7 +21,10 @@ class Stdlib {
     )
       .then((res) => res.json())
       .then((body) => {
+        if (body.tree) {
         this.modules = (body as any).tree;
+        }
+          console.log(body);
         return this.modules;
       })
       .finally(() => {

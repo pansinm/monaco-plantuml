@@ -37,6 +37,12 @@ export class PUmlService {
     return file.localSymbols();
   }
 
+  async findSpriteSymbols(puml: string) {
+    const file = new PUmlFile(puml);
+    await file.parse();
+    return file.findSpriteSymbols();
+  }
+
   async stdModules() {
     await stdlib.resolve();
     return stdlib.modules

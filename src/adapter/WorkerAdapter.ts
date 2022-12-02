@@ -6,6 +6,9 @@ class WorkerAdapter implements PUmlService {
   constructor(worker: Worker) {
     this.worker = worker;
   }
+  findSpriteSymbols(puml: string): Promise<string[]> {
+    return call(this.worker, 'findSpriteSymbols', puml);
+  }
   localSymbols(puml: string): Promise<string[]> {
     return call(this.worker, 'localSymbols', puml);
   }

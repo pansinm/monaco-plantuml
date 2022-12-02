@@ -2,12 +2,15 @@ import * as monaco from "monaco-editor";
 import {
   findPreviousMatch,
   getFenceContent,
+  getLineTextBefore,
   isInFence,
   parseCallExpression,
 } from "./utils";
 import { allkeywords, preprocessor } from "./hightlight";
 import { preprocessSnippets } from "./snippets";
 import type { PUmlService } from "../service";
+import NormalSpriteCompletion from "./completion/NormalSpriteCompletion";
+import CallableSpriteCompletion from "./completion/CallableSpriteCompletion";
 
 function alphabet(from: string, to: string) {
   const charF = from.charCodeAt(0);
@@ -156,9 +159,17 @@ class UMLCompletionItemProvider
       return;
     }
 
-    const lineTextBefore = model
-      .getLineContent(position.lineNumber)
-      .slice(0, position.column - 1);
+    const normalSpriteCompletion = new NormalSpriteCompletion(this.service);
+    if (normalSpriteCompletion.isMatch(model, position)) {
+      return normalSpriteCompletion.provideCompletionItems(model, position, context, token);
+    }
+    
+    const callableSpriteCompletion = new CallableSpriteCompletion(this.service);
+    if (await callableSpriteCompletion.isMatch(model, position)) {
+      return callableSpriteCompletion.provideCompletionItems(model, position, context, token);
+    }
+
+    const lineTextBefore = getLineTextBefore(model, position);
 
     if (context.triggerCharacter === "!") {
       const startIndex = lineTextBefore.lastIndexOf("!");

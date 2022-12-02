@@ -142,3 +142,35 @@ export function parseCallExpression(lineTextBefore: string) {
     params: res[2].split(",").map((item) => item.trim()),
   };
 }
+
+export function buildCompletionItems(
+  symbols: string[],
+  kind: monaco.languages.CompletionItemKind,
+  range: monaco.Range
+): monaco.languages.CompletionItem[] {
+  return symbols.map((symbol) => ({
+    kind,
+    range,
+    insertText: symbol,
+    label: symbol,
+  }));
+}
+
+export function getLineTextBefore(
+  model: monaco.editor.ITextModel,
+  position: monaco.Position
+) {
+  return model
+    .getLineContent(position.lineNumber)
+    .slice(0, position.column - 1);
+}
+
+export function getPlantUMLContent(model: monaco.editor.ITextModel, position: monaco.Position) {
+  if (['puml', 'plantuml'].includes(model.getLanguageId())) {
+    return model.getValue();
+  }
+  if(model.getLanguageId() === 'markdown' && isInFence(model, position, 'plantuml')) {
+    return getFenceContent(model, position);
+  }
+  throw new Error('Not plantuml');
+}

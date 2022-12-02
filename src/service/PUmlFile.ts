@@ -9,6 +9,7 @@ import type {
   ProcedureDeclaration,
   Root,
   VariableDeclaration,
+  UMLSpriteStatement,
 } from "../parser/PreprocessorAst";
 import stdlib from "./stdlib";
 
@@ -107,6 +108,22 @@ class PUmlFile {
       },
     });
     return symbols;
+  }
+
+  findSpriteSymbols() {
+    const symbols = new Set<string>();
+    this.traverseNodes({
+      UMLSpriteStatement: (node: UMLSpriteStatement) => {
+        const name = node.name.name;
+        symbols.add(name);
+      },
+    });
+    return [...symbols].map((symbol) => symbol.replace(/^\$/, ""));
+  }
+
+  traverseNodes(iter: Record<string, (node: any) => void>) {
+    traverse(this.ast, iter);
+    Object.values(this.includes).forEach((file) => file.traverseNodes(iter));
   }
 
   async parse() {
