@@ -261,7 +261,7 @@ class UMLCompletionItemProvider
 
   triggerCharacters = alphabet("a", "z")
     .concat(alphabet("A", "Z"))
-    .concat(["$", "/", "!", "<", "(", ",", "@"]);
+    .concat(["$", "/", "!", "<", "(", ",", "@", "="]);
 }
 
 export default UMLCompletionItemProvider;
