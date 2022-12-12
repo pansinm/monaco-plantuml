@@ -1,6 +1,6 @@
 {
   "name": "@sinm/monaco-plantuml",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "PlantUML extension for monaco editor with better intellisense",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -37,7 +37,8 @@
   },
   "scripts": {
     "test": "jest",
-    "start": "webpack serve"
+    "start": "webpack serve",
+    "prepublishOnly": "tsc"
   },
   "publishConfig": {
     "repository": "https://registry.npmjs.org/",
