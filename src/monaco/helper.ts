@@ -38,7 +38,6 @@ export class PumlSignatureHelpProvider
         documentation: {
           value: `${node.name.name}(${node.arguments
             .map((arg, index) => {
-              console.log(arg.init)
               const text = `${arg.name.name}${
                 arg.init ? "=" + JSON.stringify((arg.init as any).text) : ""
               }`;

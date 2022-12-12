@@ -1,5 +1,5 @@
-import pumlService from './service';
-import stdlib from './service/stdlib';
+import pumlService from "./service";
+import stdlib from "./service/stdlib";
 
 stdlib.resolve();
 
@@ -18,18 +18,7 @@ async function reply(data: { id: string; method: string; params: any[] }) {
   }
 }
 
-let init = false;
-
-const initialize = () => {
-  if (init) {
-    return;
-  }
-  self.onmessage = function (event) {
-    reply(event.data);
-  };
-  init = true;
-};
 
 self.onmessage = function (event) {
-  initialize();
+  reply(event.data);
 };

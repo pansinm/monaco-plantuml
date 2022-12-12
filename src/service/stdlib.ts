@@ -1,3 +1,6 @@
+import { DEFAULT_EXPIRES } from "./constants";
+import { getJson } from "./fetcher";
+
 class Stdlib {
   modules: { path: string; type: string; url: string }[] = [];
   loading = false;
@@ -16,15 +19,13 @@ class Stdlib {
       return new Promise((resolve) => this.resolves.push(resolve));
     }
     this.loading = true;
-    return fetch(
+    return getJson(
       "https://api.github.com/repos/plantuml/plantuml-stdlib/git/trees/master?recursive=10"
     )
-      .then((res) => res.json())
       .then((body) => {
-        if (body.tree) {
-        this.modules = (body as any).tree;
+        if (body?.tree) {
+          this.modules = (body as any).tree;
         }
-          console.log(body);
         return this.modules;
       })
       .finally(() => {

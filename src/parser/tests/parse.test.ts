@@ -1424,7 +1424,6 @@ sprite foo1 <svg viewBox="0 0 36 36">
 </svg>
   `
   const {children} = parse(input);
-  console.log(children)
   expect(children.length).toBe(4);
   expect(children.map((statement) => {
     const s = statement as unknown as UMLSpriteStatement;

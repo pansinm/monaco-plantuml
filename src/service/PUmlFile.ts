@@ -11,6 +11,7 @@ import type {
   VariableDeclaration,
   UMLSpriteStatement,
 } from "../parser/PreprocessorAst";
+import { getJson } from "./fetcher";
 import stdlib from "./stdlib";
 
 type CallableNode =
@@ -35,8 +36,7 @@ class PUmlFile {
     if (this.cache[url]) {
       return this.cache[url];
     }
-    const content = await fetch(url)
-      .then((res) => res.json())
+    const content = await getJson(url)
       .then((body) => body.content);
     return PUmlFile.create(atob(content), url);
   }
@@ -62,6 +62,7 @@ class PUmlFile {
   }
 
   allCallableNodes() {
+    debugger;
     const nodes = [...this.callableNodes];
     for (const include of Object.values(this.includes)) {
       nodes.push(...include.allCallableNodes());

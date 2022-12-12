@@ -104,7 +104,6 @@ class UMLCompletionItemProvider
       position.lineNumber,
       position.column
     );
-
     const modules = await this.service.stdModules();
     return modules.map((m) => ({
       kind: monaco.languages.CompletionItemKind.Module,
@@ -228,7 +227,9 @@ class UMLCompletionItemProvider
       range: r,
       label: kw,
     }));
+      debugger;
     const callableSymbols = await this.service.callableSymbols(fence);
+      debugger;
     const variableSymbols = await this.service.variableSymbols(fence);
     const suggestions = [
       ...callableSymbols.map((name) => ({

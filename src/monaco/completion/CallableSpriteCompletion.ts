@@ -54,6 +54,7 @@ class CallableSpriteCompletion extends AbstractCompletion {
       position.lineNumber,
       position.column
     );
+    
     return {
       suggestions: buildCompletionItems(
         sprites.map((sprite) => JSON.stringify(sprite)),

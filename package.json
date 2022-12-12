@@ -7,6 +7,7 @@
   "author": "pansinm <pansinm@foxmail.com>",
   "license": "MIT",
   "dependencies": {
+    "dexie": "^3.2.2",
     "lodash": "^4.17.21",
     "monaco-editor": "*",
     "ohm-js": "^16.4.0"
