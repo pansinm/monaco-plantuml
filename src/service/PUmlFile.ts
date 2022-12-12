@@ -62,7 +62,6 @@ class PUmlFile {
   }
 
   allCallableNodes() {
-    debugger;
     const nodes = [...this.callableNodes];
     for (const include of Object.values(this.includes)) {
       nodes.push(...include.allCallableNodes());

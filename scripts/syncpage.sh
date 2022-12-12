@@ -6,4 +6,4 @@ git add .
 git commit -am"update page"
 git push origin page --force
 echo "done!"
-git checkout maste
+git checkout master

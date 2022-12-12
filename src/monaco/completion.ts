@@ -227,9 +227,7 @@ class UMLCompletionItemProvider
       range: r,
       label: kw,
     }));
-      debugger;
     const callableSymbols = await this.service.callableSymbols(fence);
-      debugger;
     const variableSymbols = await this.service.variableSymbols(fence);
     const suggestions = [
       ...callableSymbols.map((name) => ({
