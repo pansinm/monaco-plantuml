@@ -128,7 +128,7 @@ const def = String.raw`
 
     identifier =
       | "$" (letter | digit | "_")* -- dolor
-      | letter (letter | digit | "_")*  -- letter
+      | (letter | "_") (letter | digit | "_")*  -- letter
 
     wsAroundOptional<x> = ws* x ws*
 

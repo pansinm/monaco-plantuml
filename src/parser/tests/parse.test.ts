@@ -1,7 +1,7 @@
-import { parse } from '../parser';
-import { UMLSpriteStatement } from '../PreprocessorAst';
+import { parse } from "../parser";
+import { DefineStatement, UMLSpriteStatement } from "../PreprocessorAst";
 
-it('定义变量', () => {
+it("定义变量", () => {
   const input = String.raw`@startuml
 !$ab = "foo1"
 !$cd = "foo2"
@@ -11,29 +11,29 @@ Alice -> Bob : $cd
 Alice -> Bob : $ef
 @enduml`;
   const output = {
-    type: 'Root',
+    type: "Root",
     children: [
       {
-        type: 'UmlText',
-        text: '@startuml',
+        type: "UmlText",
+        text: "@startuml",
         pos: {
           start: 0,
           end: 9,
         },
       },
       {
-        type: 'VariableDeclaration',
+        type: "VariableDeclaration",
         init: {
-          type: 'StringLiteral',
-          text: 'foo1',
+          type: "StringLiteral",
+          text: "foo1",
           pos: {
             start: 17,
             end: 23,
           },
         },
         name: {
-          type: 'Identifier',
-          name: '$ab',
+          type: "Identifier",
+          name: "$ab",
           pos: {
             start: 11,
             end: 14,
@@ -45,18 +45,18 @@ Alice -> Bob : $ef
         },
       },
       {
-        type: 'VariableDeclaration',
+        type: "VariableDeclaration",
         init: {
-          type: 'StringLiteral',
-          text: 'foo2',
+          type: "StringLiteral",
+          text: "foo2",
           pos: {
             start: 31,
             end: 37,
           },
         },
         name: {
-          type: 'Identifier',
-          name: '$cd',
+          type: "Identifier",
+          name: "$cd",
           pos: {
             start: 25,
             end: 28,
@@ -68,32 +68,32 @@ Alice -> Bob : $ef
         },
       },
       {
-        type: 'VariableDeclaration',
+        type: "VariableDeclaration",
         init: {
-          type: 'BinaryExpression',
+          type: "BinaryExpression",
           left: {
-            type: 'Identifier',
-            name: '$ab',
+            type: "Identifier",
+            name: "$ab",
             pos: {
               start: 45,
               end: 48,
             },
           },
           operator: {
-            kind: '+',
+            kind: "+",
             pos: {
               end: 50,
               start: 49,
             },
-            type: 'BinaryOperatorToken',
+            type: "BinaryOperatorToken",
           },
           pos: {
             start: 45,
             end: 54,
           },
           right: {
-            type: 'Identifier',
-            name: '$cd',
+            type: "Identifier",
+            name: "$cd",
             pos: {
               start: 51,
               end: 54,
@@ -101,8 +101,8 @@ Alice -> Bob : $ef
           },
         },
         name: {
-          type: 'Identifier',
-          name: '$ef',
+          type: "Identifier",
+          name: "$ef",
           pos: {
             start: 39,
             end: 42,
@@ -114,32 +114,32 @@ Alice -> Bob : $ef
         },
       },
       {
-        type: 'UmlText',
-        text: 'Alice -> Bob : $ab',
+        type: "UmlText",
+        text: "Alice -> Bob : $ab",
         pos: {
           start: 55,
           end: 73,
         },
       },
       {
-        type: 'UmlText',
-        text: 'Alice -> Bob : $cd',
+        type: "UmlText",
+        text: "Alice -> Bob : $cd",
         pos: {
           start: 74,
           end: 92,
         },
       },
       {
-        type: 'UmlText',
-        text: 'Alice -> Bob : $ef',
+        type: "UmlText",
+        text: "Alice -> Bob : $ef",
         pos: {
           start: 93,
           end: 111,
         },
       },
       {
-        type: 'UmlText',
-        text: '@enduml',
+        type: "UmlText",
+        text: "@enduml",
         pos: {
           start: 112,
           end: 119,
@@ -157,7 +157,7 @@ Alice -> Bob : $ef
   expect(ast).toEqual(output);
 });
 
-it('If', () => {
+it("If", () => {
   const input = String.raw`@startuml
 !$a = 10
 !$ijk = "foo"
@@ -170,29 +170,29 @@ Alice -> Bob : This should not appear
 Alice -> Bob : B
 @enduml`;
   const output = {
-    type: 'Root',
+    type: "Root",
     children: [
       {
-        type: 'UmlText',
-        text: '@startuml',
+        type: "UmlText",
+        text: "@startuml",
         pos: {
           start: 0,
           end: 9,
         },
       },
       {
-        type: 'VariableDeclaration',
+        type: "VariableDeclaration",
         init: {
           pos: {
             end: 18,
             start: 16,
           },
-          text: '10',
-          type: 'NumberLiteral',
+          text: "10",
+          type: "NumberLiteral",
         },
         name: {
-          type: 'Identifier',
-          name: '$a',
+          type: "Identifier",
+          name: "$a",
           pos: {
             start: 11,
             end: 13,
@@ -204,18 +204,18 @@ Alice -> Bob : B
         },
       },
       {
-        type: 'VariableDeclaration',
+        type: "VariableDeclaration",
         init: {
-          type: 'StringLiteral',
-          text: 'foo',
+          type: "StringLiteral",
+          text: "foo",
           pos: {
             start: 27,
             end: 32,
           },
         },
         name: {
-          type: 'Identifier',
-          name: '$ijk',
+          type: "Identifier",
+          name: "$ijk",
           pos: {
             start: 20,
             end: 24,
@@ -227,44 +227,44 @@ Alice -> Bob : B
         },
       },
       {
-        type: 'UmlText',
-        text: 'Alice -> Bob : A',
+        type: "UmlText",
+        text: "Alice -> Bob : A",
         pos: {
           start: 33,
           end: 49,
         },
       },
       {
-        type: 'IfStatement',
+        type: "IfStatement",
         expression: {
-          type: 'BinaryExpression',
+          type: "BinaryExpression",
           left: {
-            type: 'ParenthesizedExpression',
+            type: "ParenthesizedExpression",
             expression: {
-              type: 'BinaryExpression',
+              type: "BinaryExpression",
               left: {
-                type: 'Identifier',
-                name: '$ijk',
+                type: "Identifier",
+                name: "$ijk",
                 pos: {
                   start: 55,
                   end: 59,
                 },
               },
               operator: {
-                kind: '==',
+                kind: "==",
                 pos: {
                   end: 62,
                   start: 60,
                 },
-                type: 'BinaryOperatorToken',
+                type: "BinaryOperatorToken",
               },
               pos: {
                 start: 55,
                 end: 68,
               },
               right: {
-                type: 'StringLiteral',
-                text: 'foo',
+                type: "StringLiteral",
+                text: "foo",
                 pos: {
                   start: 63,
                   end: 68,
@@ -277,58 +277,58 @@ Alice -> Bob : B
             },
           },
           operator: {
-            kind: '&&',
+            kind: "&&",
             pos: {
               end: 72,
               start: 70,
             },
-            type: 'BinaryOperatorToken',
+            type: "BinaryOperatorToken",
           },
           pos: {
             start: 54,
             end: 83,
           },
           right: {
-            type: 'ParenthesizedExpression',
+            type: "ParenthesizedExpression",
             expression: {
-              type: 'BinaryExpression',
+              type: "BinaryExpression",
               left: {
-                type: 'Identifier',
-                name: '$a',
+                type: "Identifier",
+                name: "$a",
                 pos: {
                   start: 74,
                   end: 76,
                 },
               },
               operator: {
-                kind: '+',
+                kind: "+",
                 pos: {
                   end: 77,
                   start: 76,
                 },
-                type: 'BinaryOperatorToken',
+                type: "BinaryOperatorToken",
               },
               pos: {
                 start: 74,
                 end: 82,
               },
               right: {
-                type: 'BinaryExpression',
+                type: "BinaryExpression",
                 left: {
                   pos: {
                     end: 79,
                     start: 77,
                   },
-                  text: '10',
-                  type: 'NumberLiteral',
+                  text: "10",
+                  type: "NumberLiteral",
                 },
                 operator: {
-                  kind: '>=',
+                  kind: ">=",
                   pos: {
                     end: 81,
                     start: 79,
                   },
-                  type: 'BinaryOperatorToken',
+                  type: "BinaryOperatorToken",
                 },
                 pos: {
                   start: 77,
@@ -339,8 +339,8 @@ Alice -> Bob : B
                     end: 82,
                     start: 81,
                   },
-                  text: '4',
-                  type: 'NumberLiteral',
+                  text: "4",
+                  type: "NumberLiteral",
                 },
               },
             },
@@ -352,8 +352,8 @@ Alice -> Bob : B
         },
         then: [
           {
-            type: 'UmlText',
-            text: 'Alice -> Bob : yes',
+            type: "UmlText",
+            text: "Alice -> Bob : yes",
             pos: {
               start: 84,
               end: 102,
@@ -363,8 +363,8 @@ Alice -> Bob : B
         else: [
           [
             {
-              type: 'UmlText',
-              text: 'Alice -> Bob : This should not appear',
+              type: "UmlText",
+              text: "Alice -> Bob : This should not appear",
               pos: {
                 start: 109,
                 end: 146,
@@ -378,16 +378,16 @@ Alice -> Bob : B
         },
       },
       {
-        type: 'UmlText',
-        text: 'Alice -> Bob : B',
+        type: "UmlText",
+        text: "Alice -> Bob : B",
         pos: {
           start: 154,
           end: 170,
         },
       },
       {
-        type: 'UmlText',
-        text: '@enduml',
+        type: "UmlText",
+        text: "@enduml",
         pos: {
           start: 171,
           end: 178,
@@ -405,55 +405,55 @@ Alice -> Bob : B
   expect(ast).toEqual(output);
 });
 
-it('!function', () => {
+it("!function", () => {
   const input = String.raw`!function $double($a=1,$b="3", $c=4)
 !return $a + $a
 !endfunction`;
   const output = {
-    type: 'Root',
+    type: "Root",
     children: [
       {
         name: {
-          type: 'Identifier',
-          name: '$double',
+          type: "Identifier",
+          name: "$double",
           pos: {
             start: 10,
             end: 17,
           },
         },
-        type: 'FunctionDeclaration',
+        type: "FunctionDeclaration",
         pos: {
           start: 0,
           end: 65,
         },
         statements: [
           {
-            type: 'ReturnStatement',
+            type: "ReturnStatement",
             expression: {
-              type: 'BinaryExpression',
+              type: "BinaryExpression",
               left: {
-                type: 'Identifier',
-                name: '$a',
+                type: "Identifier",
+                name: "$a",
                 pos: {
                   start: 45,
                   end: 47,
                 },
               },
               operator: {
-                kind: '+',
+                kind: "+",
                 pos: {
                   end: 49,
                   start: 48,
                 },
-                type: 'BinaryOperatorToken',
+                type: "BinaryOperatorToken",
               },
               pos: {
                 start: 45,
                 end: 52,
               },
               right: {
-                type: 'Identifier',
-                name: '$a',
+                type: "Identifier",
+                name: "$a",
                 pos: {
                   start: 50,
                   end: 52,
@@ -468,10 +468,10 @@ it('!function', () => {
         ],
         arguments: [
           {
-            type: 'Argument',
+            type: "Argument",
             name: {
-              type: 'Identifier',
-              name: '$a',
+              type: "Identifier",
+              name: "$a",
               pos: {
                 start: 18,
                 end: 20,
@@ -482,8 +482,8 @@ it('!function', () => {
               end: 22,
             },
             init: {
-              type: 'NumberLiteral',
-              text: '1',
+              type: "NumberLiteral",
+              text: "1",
               pos: {
                 start: 21,
                 end: 22,
@@ -491,10 +491,10 @@ it('!function', () => {
             },
           },
           {
-            type: 'Argument',
+            type: "Argument",
             name: {
-              type: 'Identifier',
-              name: '$b',
+              type: "Identifier",
+              name: "$b",
               pos: {
                 start: 23,
                 end: 25,
@@ -505,8 +505,8 @@ it('!function', () => {
               end: 29,
             },
             init: {
-              type: 'StringLiteral',
-              text: '3',
+              type: "StringLiteral",
+              text: "3",
               pos: {
                 start: 26,
                 end: 29,
@@ -514,10 +514,10 @@ it('!function', () => {
             },
           },
           {
-            type: 'Argument',
+            type: "Argument",
             name: {
-              type: 'Identifier',
-              name: '$c',
+              type: "Identifier",
+              name: "$c",
               pos: {
                 start: 31,
                 end: 33,
@@ -528,8 +528,8 @@ it('!function', () => {
               end: 35,
             },
             init: {
-              type: 'NumberLiteral',
-              text: '4',
+              type: "NumberLiteral",
+              text: "4",
               pos: {
                 start: 34,
                 end: 35,
@@ -549,31 +549,31 @@ it('!function', () => {
   expect(parse(input)).toEqual(output);
 });
 
-it('!procedure', () => {
+it("!procedure", () => {
   const input = String.raw`!procedure msg($source, $destination)
 $source --> $destination
 !endprocedure`;
   const output = {
-    type: 'Root',
+    type: "Root",
     children: [
       {
         name: {
-          type: 'Identifier',
-          name: 'msg',
+          type: "Identifier",
+          name: "msg",
           pos: {
             start: 11,
             end: 14,
           },
         },
-        type: 'ProcedureDeclaration',
+        type: "ProcedureDeclaration",
         pos: {
           start: 0,
           end: 76,
         },
         statements: [
           {
-            type: 'UmlText',
-            text: '$source --> $destination',
+            type: "UmlText",
+            text: "$source --> $destination",
             pos: {
               start: 38,
               end: 62,
@@ -582,10 +582,10 @@ $source --> $destination
         ],
         arguments: [
           {
-            type: 'Argument',
+            type: "Argument",
             name: {
-              type: 'Identifier',
-              name: '$source',
+              type: "Identifier",
+              name: "$source",
               pos: {
                 start: 15,
                 end: 22,
@@ -597,10 +597,10 @@ $source --> $destination
             },
           },
           {
-            type: 'Argument',
+            type: "Argument",
             name: {
-              type: 'Identifier',
-              name: '$destination',
+              type: "Identifier",
+              name: "$destination",
               pos: {
                 start: 24,
                 end: 36,
@@ -615,7 +615,7 @@ $source --> $destination
       },
     ],
     sourceString:
-      '!procedure msg($source, $destination)\n$source --> $destination\n!endprocedure',
+      "!procedure msg($source, $destination)\n$source --> $destination\n!endprocedure",
     pos: {
       start: 0,
       end: 76,
@@ -624,50 +624,50 @@ $source --> $destination
   expect(parse(input)).toEqual(output);
 });
 
-it('inline function', () => {
+it("inline function", () => {
   const input = String.raw`!function $double($a) return $a + $a`;
   const output = {
-    type: 'Root',
+    type: "Root",
     children: [
       {
         name: {
-          type: 'Identifier',
-          name: '$double',
+          type: "Identifier",
+          name: "$double",
           pos: {
             start: 10,
             end: 17,
           },
         },
-        type: 'InlineFunctionDeclaration',
+        type: "InlineFunctionDeclaration",
         pos: {
           start: 0,
           end: 36,
         },
         return: {
-          type: 'BinaryExpression',
+          type: "BinaryExpression",
           left: {
-            type: 'Identifier',
-            name: '$a',
+            type: "Identifier",
+            name: "$a",
             pos: {
               start: 29,
               end: 31,
             },
           },
           operator: {
-            kind: '+',
+            kind: "+",
             pos: {
               end: 33,
               start: 32,
             },
-            type: 'BinaryOperatorToken',
+            type: "BinaryOperatorToken",
           },
           pos: {
             start: 29,
             end: 36,
           },
           right: {
-            type: 'Identifier',
-            name: '$a',
+            type: "Identifier",
+            name: "$a",
             pos: {
               start: 34,
               end: 36,
@@ -676,10 +676,10 @@ it('inline function', () => {
         },
         arguments: [
           {
-            type: 'Argument',
+            type: "Argument",
             name: {
-              type: 'Identifier',
-              name: '$a',
+              type: "Identifier",
+              name: "$a",
               pos: {
                 start: 18,
                 end: 20,
@@ -693,7 +693,7 @@ it('inline function', () => {
         ],
       },
     ],
-    sourceString: '!function $double($a) return $a + $a',
+    sourceString: "!function $double($a) return $a + $a",
     pos: {
       start: 0,
       end: 36,
@@ -702,51 +702,51 @@ it('inline function', () => {
   expect(parse(input)).toEqual(output);
 });
 
-it('unquoted function', () => {
+it("unquoted function", () => {
   const input = String.raw`!unquoted function id($text1, $text2="FOO") return $text1 + $text2`;
   const output = {
-    type: 'Root',
+    type: "Root",
     children: [
       {
         name: {
-          type: 'Identifier',
-          name: 'id',
+          type: "Identifier",
+          name: "id",
           pos: {
             start: 19,
             end: 21,
           },
         },
         unquoted: true,
-        type: 'InlineFunctionDeclaration',
+        type: "InlineFunctionDeclaration",
         pos: {
           start: 0,
           end: 66,
         },
         return: {
-          type: 'BinaryExpression',
+          type: "BinaryExpression",
           left: {
-            type: 'Identifier',
-            name: '$text1',
+            type: "Identifier",
+            name: "$text1",
             pos: {
               start: 51,
               end: 57,
             },
           },
           operator: {
-            kind: '+',
+            kind: "+",
             pos: {
               end: 59,
               start: 58,
             },
-            type: 'BinaryOperatorToken',
+            type: "BinaryOperatorToken",
           },
           pos: {
             start: 51,
             end: 66,
           },
           right: {
-            type: 'Identifier',
-            name: '$text2',
+            type: "Identifier",
+            name: "$text2",
             pos: {
               start: 60,
               end: 66,
@@ -755,10 +755,10 @@ it('unquoted function', () => {
         },
         arguments: [
           {
-            type: 'Argument',
+            type: "Argument",
             name: {
-              type: 'Identifier',
-              name: '$text1',
+              type: "Identifier",
+              name: "$text1",
               pos: {
                 start: 22,
                 end: 28,
@@ -770,10 +770,10 @@ it('unquoted function', () => {
             },
           },
           {
-            type: 'Argument',
+            type: "Argument",
             name: {
-              type: 'Identifier',
-              name: '$text2',
+              type: "Identifier",
+              name: "$text2",
               pos: {
                 start: 30,
                 end: 36,
@@ -784,8 +784,8 @@ it('unquoted function', () => {
               end: 42,
             },
             init: {
-              type: 'StringLiteral',
-              text: 'FOO',
+              type: "StringLiteral",
+              text: "FOO",
               pos: {
                 start: 37,
                 end: 42,
@@ -805,41 +805,41 @@ it('unquoted function', () => {
   expect(parse(input)).toEqual(output);
 });
 
-it('While loop', () => {
+it("While loop", () => {
   const input = String.raw`  !while $arg!=0
     [Component $arg] as $arg
     !$arg = $arg - 1
   !endwhile`;
   const output = {
-    type: 'Root',
+    type: "Root",
     children: [
       {
-        type: 'WhileStatement',
+        type: "WhileStatement",
         expression: {
-          type: 'BinaryExpression',
+          type: "BinaryExpression",
           left: {
-            type: 'Identifier',
-            name: '$arg',
+            type: "Identifier",
+            name: "$arg",
             pos: {
               start: 9,
               end: 13,
             },
           },
           operator: {
-            kind: '!=',
+            kind: "!=",
             pos: {
               end: 15,
               start: 13,
             },
-            type: 'BinaryOperatorToken',
+            type: "BinaryOperatorToken",
           },
           pos: {
             start: 9,
             end: 16,
           },
           right: {
-            type: 'NumberLiteral',
-            text: '0',
+            type: "NumberLiteral",
+            text: "0",
             pos: {
               start: 15,
               end: 16,
@@ -848,40 +848,40 @@ it('While loop', () => {
         },
         statements: [
           {
-            type: 'UmlText',
-            text: '[Component $arg] as $arg',
+            type: "UmlText",
+            text: "[Component $arg] as $arg",
             pos: {
               start: 21,
               end: 45,
             },
           },
           {
-            type: 'VariableDeclaration',
+            type: "VariableDeclaration",
             init: {
-              type: 'BinaryExpression',
+              type: "BinaryExpression",
               left: {
-                type: 'Identifier',
-                name: '$arg',
+                type: "Identifier",
+                name: "$arg",
                 pos: {
                   start: 58,
                   end: 62,
                 },
               },
               operator: {
-                kind: '-',
+                kind: "-",
                 pos: {
                   end: 64,
                   start: 63,
                 },
-                type: 'BinaryOperatorToken',
+                type: "BinaryOperatorToken",
               },
               pos: {
                 start: 58,
                 end: 66,
               },
               right: {
-                type: 'NumberLiteral',
-                text: '1',
+                type: "NumberLiteral",
+                text: "1",
                 pos: {
                   start: 65,
                   end: 66,
@@ -889,8 +889,8 @@ it('While loop', () => {
               },
             },
             name: {
-              type: 'Identifier',
-              name: '$arg',
+              type: "Identifier",
+              name: "$arg",
               pos: {
                 start: 51,
                 end: 55,
@@ -909,7 +909,7 @@ it('While loop', () => {
       },
     ],
     sourceString:
-      '!while $arg!=0\n    [Component $arg] as $arg\n    !$arg = $arg - 1\n  !endwhile',
+      "!while $arg!=0\n    [Component $arg] as $arg\n    !$arg = $arg - 1\n  !endwhile",
     pos: {
       start: 2,
       end: 78,
@@ -918,17 +918,17 @@ it('While loop', () => {
   expect(parse(input)).toEqual(output);
 });
 
-it('include', () => {
+it("include", () => {
   const input = String.raw`!include <aws/common>
 !include https://a.b.com/a.puml
 !include ../a.puml!part1`;
   const output = {
-    type: 'Root',
+    type: "Root",
     children: [
       {
-        type: 'IncludeStatement',
-        path: 'aws/common',
-        token: 'include',
+        type: "IncludeStatement",
+        path: "aws/common",
+        token: "include",
         pos: {
           start: 0,
           end: 21,
@@ -936,9 +936,9 @@ it('include', () => {
         std: true,
       },
       {
-        type: 'IncludeStatement',
-        path: 'https://a.b.com/a.puml',
-        token: 'include',
+        type: "IncludeStatement",
+        path: "https://a.b.com/a.puml",
+        token: "include",
         pos: {
           start: 22,
           end: 53,
@@ -946,19 +946,19 @@ it('include', () => {
         std: false,
       },
       {
-        type: 'IncludeStatement',
-        path: '../a.puml',
-        token: 'include',
+        type: "IncludeStatement",
+        path: "../a.puml",
+        token: "include",
         pos: {
           start: 54,
           end: 78,
         },
         std: false,
-        subpart: 'part1',
+        subpart: "part1",
       },
     ],
     sourceString:
-      '!include <aws/common>\n!include https://a.b.com/a.puml\n!include ../a.puml!part1',
+      "!include <aws/common>\n!include https://a.b.com/a.puml\n!include ../a.puml!part1",
     pos: {
       start: 0,
       end: 78,
@@ -967,27 +967,27 @@ it('include', () => {
   expect(parse(input)).toEqual(output);
 });
 
-it('scope var', () => {
+it("scope var", () => {
   const input = String.raw`
 !local $ELEMENT_FONT_COLOR = "#FFFFFF"
 !global $ARROW_COLOR = "#666666"
 `;
   const output = {
-    type: 'Root',
+    type: "Root",
     children: [
       {
-        type: 'VariableDeclaration',
+        type: "VariableDeclaration",
         init: {
-          type: 'StringLiteral',
-          text: '#FFFFFF',
+          type: "StringLiteral",
+          text: "#FFFFFF",
           pos: {
             start: 30,
             end: 39,
           },
         },
         name: {
-          type: 'Identifier',
-          name: '$ELEMENT_FONT_COLOR',
+          type: "Identifier",
+          name: "$ELEMENT_FONT_COLOR",
           pos: {
             start: 8,
             end: 27,
@@ -997,21 +997,21 @@ it('scope var', () => {
           start: 1,
           end: 39,
         },
-        scope: 'global',
+        scope: "global",
       },
       {
-        type: 'VariableDeclaration',
+        type: "VariableDeclaration",
         init: {
-          type: 'StringLiteral',
-          text: '#666666',
+          type: "StringLiteral",
+          text: "#666666",
           pos: {
             start: 63,
             end: 72,
           },
         },
         name: {
-          type: 'Identifier',
-          name: '$ARROW_COLOR',
+          type: "Identifier",
+          name: "$ARROW_COLOR",
           pos: {
             start: 48,
             end: 60,
@@ -1021,7 +1021,7 @@ it('scope var', () => {
           start: 40,
           end: 72,
         },
-        scope: 'global',
+        scope: "global",
       },
     ],
     sourceString:
@@ -1034,22 +1034,22 @@ it('scope var', () => {
   expect(parse(input)).toEqual(output);
 });
 
-it('callExpression', () => {
+it("callExpression", () => {
   const input = String.raw`
     %strlen($tags)
     $xx(3, "x")
     $yy()
   `;
   const output = {
-    type: 'Root',
+    type: "Root",
     children: [
       {
-        type: 'ExpressionStatement',
+        type: "ExpressionStatement",
         expression: {
-          type: 'CallExpression',
+          type: "CallExpression",
           name: {
-            type: 'Identifier',
-            name: 'strlen',
+            type: "Identifier",
+            name: "strlen",
             pos: {
               start: 6,
               end: 12,
@@ -1058,8 +1058,8 @@ it('callExpression', () => {
           buildIn: true,
           args: [
             {
-              type: 'Identifier',
-              name: '$tags',
+              type: "Identifier",
+              name: "$tags",
               pos: {
                 start: 13,
                 end: 18,
@@ -1077,12 +1077,12 @@ it('callExpression', () => {
         },
       },
       {
-        type: 'ExpressionStatement',
+        type: "ExpressionStatement",
         expression: {
-          type: 'CallExpression',
+          type: "CallExpression",
           name: {
-            type: 'Identifier',
-            name: '$xx',
+            type: "Identifier",
+            name: "$xx",
             pos: {
               start: 24,
               end: 27,
@@ -1090,16 +1090,16 @@ it('callExpression', () => {
           },
           args: [
             {
-              type: 'NumberLiteral',
-              text: '3',
+              type: "NumberLiteral",
+              text: "3",
               pos: {
                 start: 28,
                 end: 29,
               },
             },
             {
-              type: 'StringLiteral',
-              text: 'x',
+              type: "StringLiteral",
+              text: "x",
               pos: {
                 start: 31,
                 end: 34,
@@ -1117,12 +1117,12 @@ it('callExpression', () => {
         },
       },
       {
-        type: 'ExpressionStatement',
+        type: "ExpressionStatement",
         expression: {
-          type: 'CallExpression',
+          type: "CallExpression",
           name: {
-            type: 'Identifier',
-            name: '$yy',
+            type: "Identifier",
+            name: "$yy",
             pos: {
               start: 40,
               end: 43,
@@ -1149,34 +1149,34 @@ it('callExpression', () => {
   expect(parse(input)).toEqual(output);
 });
 
-it('!define', () => {
+it("!define", () => {
   const input = String.raw`!define LAYOUT_TOP_DOWN top to bottom direction
   !define AWSCLI(e_alias, e_label, e_techn, e_descr) AWSEntity(e_alias, e_label, e_techn, e_descr, #CC2264, AWSCLI, AWSCLI)
   `;
   const output = {
-    type: 'Root',
+    type: "Root",
     children: [
       {
-        type: 'DefineStatement',
+        type: "DefineStatement",
         name: {
-          type: 'Identifier',
-          name: 'LAYOUT_TOP_DOWN',
+          type: "Identifier",
+          name: "LAYOUT_TOP_DOWN",
           pos: {
             start: 8,
             end: 23,
           },
         },
-        content: 'top to bottom direction',
+        content: "top to bottom direction",
         pos: {
           start: 0,
           end: 47,
         },
       },
       {
-        type: 'DefineStatement',
+        type: "DefineStatement",
         name: {
-          type: 'Identifier',
-          name: 'AWSCLI',
+          type: "Identifier",
+          name: "AWSCLI",
           pos: {
             start: 58,
             end: 64,
@@ -1184,10 +1184,10 @@ it('!define', () => {
         },
         arguments: [
           {
-            type: 'Argument',
+            type: "Argument",
             name: {
-              type: 'Identifier',
-              name: 'e_alias',
+              type: "Identifier",
+              name: "e_alias",
               pos: {
                 start: 65,
                 end: 72,
@@ -1199,10 +1199,10 @@ it('!define', () => {
             },
           },
           {
-            type: 'Argument',
+            type: "Argument",
             name: {
-              type: 'Identifier',
-              name: 'e_label',
+              type: "Identifier",
+              name: "e_label",
               pos: {
                 start: 74,
                 end: 81,
@@ -1214,10 +1214,10 @@ it('!define', () => {
             },
           },
           {
-            type: 'Argument',
+            type: "Argument",
             name: {
-              type: 'Identifier',
-              name: 'e_techn',
+              type: "Identifier",
+              name: "e_techn",
               pos: {
                 start: 83,
                 end: 90,
@@ -1229,10 +1229,10 @@ it('!define', () => {
             },
           },
           {
-            type: 'Argument',
+            type: "Argument",
             name: {
-              type: 'Identifier',
-              name: 'e_descr',
+              type: "Identifier",
+              name: "e_descr",
               pos: {
                 start: 92,
                 end: 99,
@@ -1245,7 +1245,7 @@ it('!define', () => {
           },
         ],
         content:
-          'AWSEntity(e_alias, e_label, e_techn, e_descr, #CC2264, AWSCLI, AWSCLI)',
+          "AWSEntity(e_alias, e_label, e_techn, e_descr, #CC2264, AWSCLI, AWSCLI)",
         pos: {
           start: 50,
           end: 171,
@@ -1253,7 +1253,7 @@ it('!define', () => {
       },
     ],
     sourceString:
-      '!define LAYOUT_TOP_DOWN top to bottom direction\n  !define AWSCLI(e_alias, e_label, e_techn, e_descr) AWSEntity(e_alias, e_label, e_techn, e_descr, #CC2264, AWSCLI, AWSCLI)\n  ',
+      "!define LAYOUT_TOP_DOWN top to bottom direction\n  !define AWSCLI(e_alias, e_label, e_techn, e_descr) AWSEntity(e_alias, e_label, e_techn, e_descr, #CC2264, AWSCLI, AWSCLI)\n  ",
     pos: {
       start: 0,
       end: 174,
@@ -1262,19 +1262,19 @@ it('!define', () => {
   expect(parse(input)).toEqual(output);
 });
 
-it('!definelong', () => {
+it("!definelong", () => {
   const input = String.raw`!definelong AzureEntity(e_alias, e_label, e_techn, e_color, e_sprite, e_stereo)
 rectangle "==e_label\n<color:e_color><$e_sprite></color>\n//<size:TECHN_FONT_SIZE>[e_techn]</size>//" <<e_stereo>> as e_alias
 !enddefinelong
 `;
   const output = {
-    type: 'Root',
+    type: "Root",
     children: [
       {
-        type: 'DefineLongStatement',
+        type: "DefineLongStatement",
         name: {
-          type: 'Identifier',
-          name: 'AzureEntity',
+          type: "Identifier",
+          name: "AzureEntity",
           pos: {
             start: 12,
             end: 23,
@@ -1282,10 +1282,10 @@ rectangle "==e_label\n<color:e_color><$e_sprite></color>\n//<size:TECHN_FONT_SIZ
         },
         arguments: [
           {
-            type: 'Argument',
+            type: "Argument",
             name: {
-              type: 'Identifier',
-              name: 'e_alias',
+              type: "Identifier",
+              name: "e_alias",
               pos: {
                 start: 24,
                 end: 31,
@@ -1297,10 +1297,10 @@ rectangle "==e_label\n<color:e_color><$e_sprite></color>\n//<size:TECHN_FONT_SIZ
             },
           },
           {
-            type: 'Argument',
+            type: "Argument",
             name: {
-              type: 'Identifier',
-              name: 'e_label',
+              type: "Identifier",
+              name: "e_label",
               pos: {
                 start: 33,
                 end: 40,
@@ -1312,10 +1312,10 @@ rectangle "==e_label\n<color:e_color><$e_sprite></color>\n//<size:TECHN_FONT_SIZ
             },
           },
           {
-            type: 'Argument',
+            type: "Argument",
             name: {
-              type: 'Identifier',
-              name: 'e_techn',
+              type: "Identifier",
+              name: "e_techn",
               pos: {
                 start: 42,
                 end: 49,
@@ -1327,10 +1327,10 @@ rectangle "==e_label\n<color:e_color><$e_sprite></color>\n//<size:TECHN_FONT_SIZ
             },
           },
           {
-            type: 'Argument',
+            type: "Argument",
             name: {
-              type: 'Identifier',
-              name: 'e_color',
+              type: "Identifier",
+              name: "e_color",
               pos: {
                 start: 51,
                 end: 58,
@@ -1342,10 +1342,10 @@ rectangle "==e_label\n<color:e_color><$e_sprite></color>\n//<size:TECHN_FONT_SIZ
             },
           },
           {
-            type: 'Argument',
+            type: "Argument",
             name: {
-              type: 'Identifier',
-              name: 'e_sprite',
+              type: "Identifier",
+              name: "e_sprite",
               pos: {
                 start: 60,
                 end: 68,
@@ -1357,10 +1357,10 @@ rectangle "==e_label\n<color:e_color><$e_sprite></color>\n//<size:TECHN_FONT_SIZ
             },
           },
           {
-            type: 'Argument',
+            type: "Argument",
             name: {
-              type: 'Identifier',
-              name: 'e_stereo',
+              type: "Identifier",
+              name: "e_stereo",
               pos: {
                 start: 70,
                 end: 78,
@@ -1374,7 +1374,7 @@ rectangle "==e_label\n<color:e_color><$e_sprite></color>\n//<size:TECHN_FONT_SIZ
         ],
         statements: [
           {
-            type: 'UmlText',
+            type: "UmlText",
             text: 'rectangle "==e_label\\n<color:e_color><$e_sprite></color>\\n//<size:TECHN_FONT_SIZE>[e_techn]</size>//" <<e_stereo>> as e_alias',
             pos: {
               start: 80,
@@ -1398,7 +1398,7 @@ rectangle "==e_label\n<color:e_color><$e_sprite></color>\n//<size:TECHN_FONT_SIZ
   expect(parse(input)).toEqual(output);
 });
 
-it('UMLSpriteStatement', () => {
+it("UMLSpriteStatement", () => {
   const input = String.raw`
  sprite $bug [15x15/16z] PKzR2i0m2BFMi15p__FEjQEqB1z27aeqCqixa8S4OT7C53cKpsHpaYPDJY_12MHM-BLRyywPhrrlw3qumqNThmXgd1TOterAZmOW8sgiJafogofWRwtV3nCF
  sprite $printer [15x15/8z] NOtH3W0W208HxFz_kMAhj7lHWpa1XC716sz0Pq4MVPEWfBHIuxP3L6kbTcizR8tAhzaqFvXwvFfPEqm0
@@ -1422,12 +1422,25 @@ sprite foo1 <svg viewBox="0 0 36 36">
 <path fill="#77B255" d="M36 32c0 2.209-1.791 4-4 4H4c-2.209 0-4-1.791-4-4V4c0-2.209 1.791-4 4-4h28c2.209 0 4 1.791 4 4v28z"/>
 <path fill="#FFF" d="M21.529 18.006l8.238-8.238c.977-.976.977-2.559 0-3.535-.977-.977-2.559-.977-3.535 0l-8.238 8.238-8.238-8.238c-.976-.977-2.56-.977-3.535 0-.977.976-.977 2.559 0 3.535l8.238 8.238-8.258 8.258c-.977.977-.977 2.559 0 3.535.488.488 1.128.732 1.768.732s1.28-.244 1.768-.732l8.258-8.259 8.238 8.238c.488.488 1.128.732 1.768.732s1.279-.244 1.768-.732c.977-.977.977-2.559 0-3.535l-8.24-8.237z"/>
 </svg>
-  `
-  const {children} = parse(input);
+  `;
+  const { children } = parse(input);
   expect(children.length).toBe(4);
-  expect(children.map((statement) => {
-    const s = statement as unknown as UMLSpriteStatement;
-    return s.name.name
-  })).toEqual(['$bug', '$printer', '$disk', 'foo1'])
-  expect(children[0]).toHaveProperty('spec', '15x15/16z')
-})
+  expect(
+    children.map((statement) => {
+      const s = statement as unknown as UMLSpriteStatement;
+      return s.name.name;
+    })
+  ).toEqual(["$bug", "$printer", "$disk", "foo1"]);
+  expect(children[0]).toHaveProperty("spec", "15x15/16z");
+});
+
+it("!define argument identifier starts with _", () => {
+  const input = `@startuml
+!define FA5_AD(_alias) ENTITY(rectangle,black,ad,_alias,FA5 AD)
+@enduml`;
+
+  const {children} = parse(input);
+  const def = children[1] as any;
+  const name = def.arguments[0].name.name;
+  expect(name).toBe('_alias');
+});

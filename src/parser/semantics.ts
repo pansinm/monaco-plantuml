@@ -286,6 +286,7 @@ semantics.addOperation('toTree', {
       pos: getPos(this),
     };
   },
+
   wsAroundOptional(_1, x, _2) {
     return x.toTree();
   },
