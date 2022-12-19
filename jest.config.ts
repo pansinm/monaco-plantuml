@@ -164,25 +164,26 @@ export default {
   // ],
   // The regexp pattern or array of patterns that Jest uses to detect test files
   // testRegex: [],
-  
+
   // This option allows the use of a custom results processor
   // testResultsProcessor: undefined,
-  
+
   // This option allows use of a custom test runner
   // testRunner: "jest-circus/runner",
-  
+
   // A map from regular expressions to paths to transformers
   transform: {
-    '^.+\\.(ts|js)?$': 'ts-jest',
+    "^.+\\.(ts|js)?$": "ts-jest",
   },
 
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
   moduleNameMapper: {
-    'monaco-editor':
-      '<rootDir>/node_modules/monaco-editor/esm/vs/editor/editor.api',
-      '^.+\\.(css|less)$': '<rootDir>/package.json',
+    "monaco-editor":
+      "<rootDir>/node_modules/monaco-editor/esm/vs/editor/editor.api",
+    "^.+\\.(css|less)$": "<rootDir>/package.json",
+    dexie: "<rootDir>/node_modules/dexie/dist/dexie.js",
   },
-  transformIgnorePatterns: ['node_modules/(?!(monaco-editor)/)'],
+  transformIgnorePatterns: ["node_modules/(?!(monaco-editor|dexie)/)"],
 
   // transformIgnorePatterns: [
   //   "/node_modules/",

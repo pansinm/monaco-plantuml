@@ -1,6 +1,24 @@
 import PUmlFile from "../PUmlFile";
 import fetch from "node-fetch";
 
+jest.mock(
+  "dexie",
+  () =>
+    class {
+      files:any;
+      constructor() {}
+      version() {
+        return { stores: () => {
+          this.files = {
+            add(){},
+            get() {
+              return null
+            }
+          }
+        } };
+      }
+    } as any
+);
 const puml = `
 !include <archimate/Archimate>
 
@@ -33,9 +51,11 @@ it("find include callable nodes", async () => {
 });
 
 it("find arguments", async () => {
-    expect(file.findArguments('Motivation_Assessment').length).toBe(2)
+  expect(file.findArguments("Motivation_Assessment").length).toBe(2);
 });
 
-it('find callable node', () => {
-    expect(file.findCallableNode('Motivation_Assessment')?.name.name).toBe('Motivation_Assessment')
+it("find callable node", () => {
+  expect(file.findCallableNode("Motivation_Assessment")?.name.name).toBe(
+    "Motivation_Assessment"
+  );
 });

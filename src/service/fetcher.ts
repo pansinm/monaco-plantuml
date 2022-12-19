@@ -17,7 +17,12 @@ async function updateCache(url: string) {
     updatedAt: Date.now(),
     url,
   });
-  return db.files.get(id);
+  return {
+    id,
+    content: JSON.stringify(content),
+    updatedAt: Date.now(),
+    url,
+  };
 }
 
 async function getCacheOrFetch(url: string, expires: number) {
