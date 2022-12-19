@@ -1,6 +1,6 @@
 {
   "name": "@sinm/monaco-plantuml",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "description": "PlantUML extension for monaco editor with better intellisense",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
