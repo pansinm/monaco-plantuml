@@ -92,6 +92,34 @@ Alice -> Bob : $ef
   expect(ast).toEqual(output);
 });
 
+it("!$LEGEND_IMAGE_SIZE_FACTOR ?= 0.25", () => {
+  const input = String.raw`!$LEGEND_IMAGE_SIZE_FACTOR ?= 0.25`;
+  const ast = parse(input);
+  const output = {
+    children: [
+      {
+        init: {
+          pos: { end: 34, start: 30 },
+          text: "0.25",
+          type: "NumberLiteral",
+        },
+        name: {
+          name: "$LEGEND_IMAGE_SIZE_FACTOR",
+          pos: { end: 26, start: 1 },
+          type: "Identifier",
+        },
+        pos: { end: 34, start: 0 },
+        scope: undefined,
+        type: "VariableDeclaration",
+      },
+    ],
+    pos: { end: 34, start: 0 },
+    sourceString: "!$LEGEND_IMAGE_SIZE_FACTOR ?= 0.25",
+    type: "Root",
+  };
+  expect(ast).toEqual(output);
+});
+
 it("If", () => {
   const input = String.raw`@startuml
 !$a = 10

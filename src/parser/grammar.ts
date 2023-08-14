@@ -119,7 +119,7 @@ const def = String.raw`
       | "*"
       | "/"
 
-    numberLiteral = digit+
+    numberLiteral = (digit | ".")+
 
     stringLiteral =
       | "\"" stringLiteralDbChar* "\""
