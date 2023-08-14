@@ -20,7 +20,8 @@ const def = String.raw`
       | UMLSpriteStatement
       | umlStatement
 
-    variableDeclaration = "!" globalVar? identifier wsAroundOptional<"="> expression &le
+    assign = "?=" | "="
+    variableDeclaration = "!" globalVar? identifier wsAroundOptional<assign> expression &le
     globalVar =
       | "global" ws+ -- global
       | "local" ws+ -- local

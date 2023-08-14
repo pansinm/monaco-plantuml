@@ -3,7 +3,7 @@ import { DefineStatement, UMLSpriteStatement } from "../PreprocessorAst";
 
 it("定义变量", () => {
   const input = String.raw`@startuml
-!$ab = "foo1"
+!$ab ?= "foo1"
 !$cd = "foo2"
 !$ef = $ab + $cd
 Alice -> Bob : $ab
@@ -11,147 +11,82 @@ Alice -> Bob : $cd
 Alice -> Bob : $ef
 @enduml`;
   const output = {
-    type: "Root",
     children: [
+      { pos: { end: 9, start: 0 }, text: "@startuml", type: "UmlText" },
       {
-        type: "UmlText",
-        text: "@startuml",
-        pos: {
-          start: 0,
-          end: 9,
-        },
-      },
-      {
-        type: "VariableDeclaration",
         init: {
-          type: "StringLiteral",
+          pos: { end: 24, start: 18 },
           text: "foo1",
-          pos: {
-            start: 17,
-            end: 23,
-          },
-        },
-        name: {
-          type: "Identifier",
-          name: "$ab",
-          pos: {
-            start: 11,
-            end: 14,
-          },
-        },
-        pos: {
-          start: 10,
-          end: 23,
-        },
-      },
-      {
-        type: "VariableDeclaration",
-        init: {
           type: "StringLiteral",
-          text: "foo2",
-          pos: {
-            start: 31,
-            end: 37,
-          },
         },
-        name: {
-          type: "Identifier",
-          name: "$cd",
-          pos: {
-            start: 25,
-            end: 28,
-          },
-        },
-        pos: {
-          start: 24,
-          end: 37,
-        },
+        name: { name: "$ab", pos: { end: 14, start: 11 }, type: "Identifier" },
+        pos: { end: 24, start: 10 },
+        scope: undefined,
+        type: "VariableDeclaration",
       },
       {
-        type: "VariableDeclaration",
         init: {
-          type: "BinaryExpression",
+          pos: { end: 38, start: 32 },
+          text: "foo2",
+          type: "StringLiteral",
+        },
+        name: { name: "$cd", pos: { end: 29, start: 26 }, type: "Identifier" },
+        pos: { end: 38, start: 25 },
+        scope: undefined,
+        type: "VariableDeclaration",
+      },
+      {
+        init: {
           left: {
-            type: "Identifier",
             name: "$ab",
-            pos: {
-              start: 45,
-              end: 48,
-            },
+            pos: { end: 49, start: 46 },
+            type: "Identifier",
           },
           operator: {
             kind: "+",
-            pos: {
-              end: 50,
-              start: 49,
-            },
+            pos: { end: 51, start: 50 },
             type: "BinaryOperatorToken",
           },
-          pos: {
-            start: 45,
-            end: 54,
-          },
+          pos: { end: 55, start: 46 },
           right: {
-            type: "Identifier",
             name: "$cd",
-            pos: {
-              start: 51,
-              end: 54,
-            },
+            pos: { end: 55, start: 52 },
+            type: "Identifier",
           },
+          type: "BinaryExpression",
         },
-        name: {
-          type: "Identifier",
-          name: "$ef",
-          pos: {
-            start: 39,
-            end: 42,
-          },
-        },
-        pos: {
-          start: 38,
-          end: 54,
-        },
+        name: { name: "$ef", pos: { end: 43, start: 40 }, type: "Identifier" },
+        pos: { end: 55, start: 39 },
+        scope: undefined,
+        type: "VariableDeclaration",
       },
       {
-        type: "UmlText",
+        pos: { end: 74, start: 56 },
         text: "Alice -> Bob : $ab",
-        pos: {
-          start: 55,
-          end: 73,
-        },
+        type: "UmlText",
       },
       {
-        type: "UmlText",
+        pos: { end: 93, start: 75 },
         text: "Alice -> Bob : $cd",
-        pos: {
-          start: 74,
-          end: 92,
-        },
+        type: "UmlText",
       },
       {
-        type: "UmlText",
+        pos: { end: 112, start: 94 },
         text: "Alice -> Bob : $ef",
-        pos: {
-          start: 93,
-          end: 111,
-        },
-      },
-      {
         type: "UmlText",
-        text: "@enduml",
-        pos: {
-          start: 112,
-          end: 119,
-        },
       },
+      { pos: { end: 120, start: 113 }, text: "@enduml", type: "UmlText" },
     ],
-    sourceString:
-      '@startuml\n!$ab = "foo1"\n!$cd = "foo2"\n!$ef = $ab + $cd\nAlice -> Bob : $ab\nAlice -> Bob : $cd\nAlice -> Bob : $ef\n@enduml',
-    pos: {
-      start: 0,
-      end: 119,
-    },
+    pos: { end: 120, start: 0 },
+    sourceString: `@startuml
+!$ab ?= \"foo1\"
+!$cd = \"foo2\"
+!$ef = $ab + $cd
+Alice -> Bob : $ab
+Alice -> Bob : $cd
+Alice -> Bob : $ef
+@enduml`,
+    type: "Root",
   };
   const ast = parse(input);
   expect(ast).toEqual(output);
@@ -1439,8 +1374,8 @@ it("!define argument identifier starts with _", () => {
 !define FA5_AD(_alias) ENTITY(rectangle,black,ad,_alias,FA5 AD)
 @enduml`;
 
-  const {children} = parse(input);
+  const { children } = parse(input);
   const def = children[1] as any;
   const name = def.arguments[0].name.name;
-  expect(name).toBe('_alias');
+  expect(name).toBe("_alias");
 });
