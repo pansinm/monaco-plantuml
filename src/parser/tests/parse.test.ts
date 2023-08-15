@@ -120,6 +120,22 @@ it("!$LEGEND_IMAGE_SIZE_FACTOR ?= 0.25", () => {
   expect(ast).toEqual(output);
 });
 
+it("parse    `!theme superhero`", () => {
+  const input = "    !theme superhero";
+  expect(parse(input)).toEqual({
+    children: [
+      {
+        pos: { end: 20, start: 4 },
+        theme: "superhero",
+        type: "ThemeStatement",
+      },
+    ],
+    pos: { end: 20, start: 4 },
+    sourceString: "!theme superhero",
+    type: "Root",
+  });
+});
+
 it("If", () => {
   const input = String.raw`@startuml
 !$a = 10

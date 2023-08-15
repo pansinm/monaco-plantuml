@@ -15,6 +15,7 @@ const def = String.raw`
       | IfStatement
       | WhileStatement
       | ReturnStatement
+      | ThemeStatement
       | ExpressionStatement
       | UnknownStatement
       | UMLSpriteStatement
@@ -69,6 +70,7 @@ const def = String.raw`
 
     WhileStatement = "!while" expression Statement* endToken<"while">
 
+    ThemeStatement = "!theme" letter+
     // TODO
     UnknownStatement = "!" ("log" | "assert" | "themes" | "dump_memory" | "import") #notnl*
 

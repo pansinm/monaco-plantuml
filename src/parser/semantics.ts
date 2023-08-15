@@ -20,6 +20,7 @@ import type {
   ReturnStatement,
   Root,
   StringLiteral,
+  ThemeStatement,
   UMLSpriteStatement,
   UmlText,
   UnknownStatement,
@@ -194,6 +195,13 @@ semantics.addOperation('toTree', {
       expression: expression.toTree(),
       pos: getPos(expression),
     };
+  },
+  ThemeStatement(_1, _2): ThemeStatement {
+    return {
+      type: 'ThemeStatement',
+      theme: _2.sourceString,
+      pos: getPos(this),
+    }
   },
   UnknownStatement(_1, _2, _3): UnknownStatement {
     return {

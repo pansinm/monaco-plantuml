@@ -37,6 +37,11 @@ export interface ExpressionStatement extends Position {
   expression: Expression;
 }
 
+export interface ThemeStatement extends Position {
+  type: 'ThemeStatement';
+  theme: string;
+}
+
 export interface InlineFunctionDeclaration extends Position {
   name: Identifier;
   type: 'InlineFunctionDeclaration';
