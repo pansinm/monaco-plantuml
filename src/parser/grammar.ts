@@ -72,7 +72,7 @@ const def = String.raw`
 
     ThemeStatement = "!theme" letter+
     // TODO
-    UnknownStatement = "!" ("log" | "assert" | "themes" | "dump_memory" | "import") #notnl*
+    UnknownStatement = "!" ("log" | "assert" | "themes" | "dump_memory" | "import" | "program") #notnl*
 
     UMLSpriteStatement = 
       | "sprite" identifier Svg --svg

@@ -22,7 +22,9 @@ let allFiles = getAllFiles("./plantuml-stdlib").filter((file) =>
   file.endsWith(".puml")
 );
 
-allFiles = allFiles.slice(Math.round(allFiles.length * Math.random())).slice(0, 300)
+if (!process.env.E2E) {
+  allFiles = allFiles.slice(Math.round(allFiles.length * Math.random())).slice(0, 300)
+}
 
 describe("parse stdlib", () => {
   for (let file of allFiles) {
@@ -34,7 +36,7 @@ describe("parse stdlib", () => {
       try {
         parse(content);
       } catch (err) {
-        console.log("parse failed:", err, content);
+        console.error("parse failed:", err, content);
         throw err;
       }
     });
