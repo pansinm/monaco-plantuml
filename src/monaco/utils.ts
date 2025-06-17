@@ -1,14 +1,15 @@
-import { findLastIndex } from "lodash";
-import * as monaco from "monaco-editor";
+import type * as monaco from "monaco-editor";
+import { getMonacoInstance } from "../monaco";
 
 type Matcher = RegExp | string | ((text: string) => boolean);
 
 export function getCurrentRange(editor: monaco.editor.ICodeEditor) {
+  const _monaco = getMonacoInstance();
   const selection = editor?.getSelection();
   if (selection) {
     const { startLineNumber, startColumn, endLineNumber, endColumn } =
       selection;
-    return new monaco.Range(
+    return new _monaco.Range(
       startLineNumber,
       startColumn,
       endLineNumber,
@@ -32,7 +33,9 @@ export function getTextBefore(
   model: monaco.editor.ITextModel,
   position: monaco.Position
 ) {
-  const beforeRange = new monaco.Range(
+  const _monaco = getMonacoInstance();
+
+  const beforeRange = new _monaco.Range(
     1,
     1,
     position.lineNumber,
@@ -45,8 +48,10 @@ export function getTextAfter(
   model: monaco.editor.ITextModel,
   position: monaco.Position
 ) {
+  const _monaco = getMonacoInstance();
+
   const modelRange = model.getFullModelRange();
-  const afterRange = new monaco.Range(
+  const afterRange = new _monaco.Range(
     position.lineNumber,
     position.column,
     modelRange.endLineNumber,
@@ -165,14 +170,20 @@ export function getLineTextBefore(
     .slice(0, position.column - 1);
 }
 
-export function getPlantUMLContent(model: monaco.editor.ITextModel, position: monaco.Position) {
-  if (['puml', 'plantuml'].includes(model.getLanguageId())) {
+export function getPlantUMLContent(
+  model: monaco.editor.ITextModel,
+  position: monaco.Position
+) {
+  if (["puml", "plantuml"].includes(model.getLanguageId())) {
     return model.getValue();
   }
-  if(model.getLanguageId() === 'markdown' && isInFence(model, position, 'plantuml')) {
+  if (
+    model.getLanguageId() === "markdown" &&
+    isInFence(model, position, "plantuml")
+  ) {
     return getFenceContent(model, position);
   }
-  throw new Error('Not plantuml');
+  throw new Error("Not plantuml");
 }
 
 export function alphabet(from: string, to: string) {

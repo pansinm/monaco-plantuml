@@ -1,14 +1,16 @@
-import * as monaco from "monaco-editor";
+import type * as monaco from "monaco-editor";
 import asyncAdapter from "../adapter/asyncAdapter";
 import WorkerAdapter from "../adapter/WorkerAdapter";
 import type { PUmlService } from "../service";
 import UMLCompletionItemProvider from "./completion";
 import { PumlSignatureHelpProvider } from "./helper";
 import { languageDef } from "./hightlight";
+import { getMonacoInstance } from "../monaco";
 
 class PUmlExtension {
   private registerLanguage() {
-    monaco.languages.register({
+    const _monaco = getMonacoInstance();
+    _monaco.languages.register({
       id: "plantuml",
       filenamePatterns: ["\\.(puml|plantuml)(\\.svg)?$"],
       aliases: ["puml"],
@@ -21,22 +23,23 @@ class PUmlExtension {
   }
 
   active(editor: monaco.editor.IStandaloneCodeEditor): monaco.IDisposable {
+    const _monaco = getMonacoInstance();
     let disposers: monaco.IDisposable[] = [];
     this.registerLanguage();
 
     disposers.push(
-      monaco.languages.setMonarchTokensProvider("plantuml", languageDef)
+      _monaco.languages.setMonarchTokensProvider("plantuml", languageDef)
     );
-    
+
     const completionProvider = new UMLCompletionItemProvider(this.adapter);
     disposers.push(
-      monaco.languages.registerCompletionItemProvider(
+      _monaco.languages.registerCompletionItemProvider(
         "markdown",
         completionProvider
       )
     );
     disposers.push(
-      monaco.languages.registerCompletionItemProvider(
+      _monaco.languages.registerCompletionItemProvider(
         "plantuml",
         completionProvider
       )
@@ -44,10 +47,10 @@ class PUmlExtension {
 
     const signature = new PumlSignatureHelpProvider(this.adapter);
     disposers.push(
-      monaco.languages.registerSignatureHelpProvider("markdown", signature)
+      _monaco.languages.registerSignatureHelpProvider("markdown", signature)
     );
     disposers.push(
-      monaco.languages.registerSignatureHelpProvider("plantuml", signature)
+      _monaco.languages.registerSignatureHelpProvider("plantuml", signature)
     );
     return {
       dispose() {

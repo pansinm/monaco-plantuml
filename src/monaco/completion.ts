@@ -1,4 +1,4 @@
-import * as monaco from "monaco-editor";
+import type * as monaco from "monaco-editor";
 import {
   alphabet,
   findPreviousMatch,
@@ -12,6 +12,7 @@ import { preprocessSnippets } from "./snippets";
 import type { PUmlService } from "../service";
 import NormalSpriteCompletion from "./completion/NormalSpriteCompletion";
 import CallableSpriteCompletion from "./completion/CallableSpriteCompletion";
+import { getMonacoInstance } from "../monaco";
 
 const ALL_THEMES = [
   "_none_",
@@ -70,7 +71,8 @@ class UMLCompletionItemProvider
     position: monaco.Position
   ): monaco.languages.CompletionItem[] {
     const startIndex = lineTextBefore.lastIndexOf("!");
-    const range = new monaco.Range(
+    const _monaco = getMonacoInstance();
+    const range = new _monaco.Range(
       position.lineNumber,
       startIndex + 1,
       position.lineNumber,
@@ -82,12 +84,12 @@ class UMLCompletionItemProvider
       })
       .map((snippet) => {
         return {
-          kind: monaco.languages.CompletionItemKind.Function,
+          kind: _monaco.languages.CompletionItemKind.Function,
           insertText: snippet.body,
           range,
           label: snippet.label,
           insertTextRules:
-            monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+            _monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
         };
       });
     return items;
@@ -98,7 +100,8 @@ class UMLCompletionItemProvider
     position: monaco.Position
   ): Promise<monaco.languages.CompletionItem[]> {
     const startIndex = lineTextBefore.lastIndexOf("<");
-    const range = new monaco.Range(
+    const _monaco = getMonacoInstance();
+    const range = new _monaco.Range(
       position.lineNumber,
       startIndex + 2,
       position.lineNumber,
@@ -106,7 +109,7 @@ class UMLCompletionItemProvider
     );
     const modules = await this.service.stdModules();
     return modules.map((m) => ({
-      kind: monaco.languages.CompletionItemKind.Module,
+      kind: _monaco.languages.CompletionItemKind.Module,
       insertText: m,
       range,
       label: m,
@@ -121,7 +124,8 @@ class UMLCompletionItemProvider
     if (!prevSpace) {
       return;
     }
-    const range = new monaco.Range(
+    const _monaco = getMonacoInstance();
+    const range = new _monaco.Range(
       position.lineNumber,
       prevSpace.range.endColumn,
       position.lineNumber,
@@ -129,7 +133,7 @@ class UMLCompletionItemProvider
     );
     return {
       suggestions: ALL_THEMES.map((theme) => ({
-        kind: monaco.languages.CompletionItemKind.Color,
+        kind: _monaco.languages.CompletionItemKind.Color,
         insertText: theme,
         range,
         label: "" + theme,
@@ -144,6 +148,7 @@ class UMLCompletionItemProvider
     token: monaco.CancellationToken
   ) {
     const isMarkdown = model.getLanguageId() === "markdown";
+    const _monaco = getMonacoInstance();
 
     if (isMarkdown && !isInFence(model, position, "plantuml")) {
       return;
@@ -151,19 +156,29 @@ class UMLCompletionItemProvider
 
     const normalSpriteCompletion = new NormalSpriteCompletion(this.service);
     if (normalSpriteCompletion.isMatch(model, position)) {
-      return normalSpriteCompletion.provideCompletionItems(model, position, context, token);
+      return normalSpriteCompletion.provideCompletionItems(
+        model,
+        position,
+        context,
+        token
+      );
     }
-    
+
     const callableSpriteCompletion = new CallableSpriteCompletion(this.service);
     if (await callableSpriteCompletion.isMatch(model, position)) {
-      return callableSpriteCompletion.provideCompletionItems(model, position, context, token);
+      return callableSpriteCompletion.provideCompletionItems(
+        model,
+        position,
+        context,
+        token
+      );
     }
 
     const lineTextBefore = getLineTextBefore(model, position);
 
     if (context.triggerCharacter === "!") {
       const startIndex = lineTextBefore.lastIndexOf("!");
-      const r = new monaco.Range(
+      const r = new _monaco.Range(
         position.lineNumber,
         startIndex + 1,
         position.lineNumber,
@@ -172,7 +187,7 @@ class UMLCompletionItemProvider
       return {
         suggestions: preprocessor.map((pre) => {
           return {
-            kind: monaco.languages.CompletionItemKind.Keyword,
+            kind: _monaco.languages.CompletionItemKind.Keyword,
             insertText: pre + " ",
             range: r,
             label: pre,
@@ -199,7 +214,7 @@ class UMLCompletionItemProvider
       return { suggestions: this.preprocessorItems(lineTextBefore, position) };
     }
 
-    const r = new monaco.Range(
+    const r = new _monaco.Range(
       position.lineNumber,
       position.column - 1,
       position.lineNumber,
@@ -213,7 +228,7 @@ class UMLCompletionItemProvider
         suggestions: symbols
           .filter((s) => !callExp.params.includes(s))
           .map((name) => ({
-            kind: monaco.languages.CompletionItemKind.Variable,
+            kind: _monaco.languages.CompletionItemKind.Variable,
             insertText: name,
             label: name,
             range: r,
@@ -222,7 +237,7 @@ class UMLCompletionItemProvider
     }
 
     const keywords = allkeywords.map((kw) => ({
-      kind: monaco.languages.CompletionItemKind.Keyword,
+      kind: _monaco.languages.CompletionItemKind.Keyword,
       insertText: kw,
       range: r,
       label: kw,
@@ -231,13 +246,13 @@ class UMLCompletionItemProvider
     const variableSymbols = await this.service.variableSymbols(fence);
     const suggestions = [
       ...callableSymbols.map((name) => ({
-        kind: monaco.languages.CompletionItemKind.Method,
+        kind: _monaco.languages.CompletionItemKind.Method,
         insertText: name,
         label: name,
         range: r,
       })),
       ...variableSymbols.map((name) => ({
-        kind: monaco.languages.CompletionItemKind.Variable,
+        kind: _monaco.languages.CompletionItemKind.Variable,
         insertText: name,
         label: name,
         range: r,

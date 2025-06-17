@@ -10,6 +10,7 @@ import {
   isPositionMatch,
   isTextMatch,
 } from "../utils";
+import { setMonacoInstance } from "../../monaco";
 
 const md = `
     text
@@ -28,6 +29,10 @@ Object.assign(window, {
       // ignore
     },
   }),
+});
+
+beforeEach(() => {
+  setMonacoInstance(monaco);
 });
 
 describe("isMatcher", () => {
@@ -200,13 +205,14 @@ describe("getLineTextBefore", () => {
     expect(getLineTextBefore(model, new monaco.Position(2, 1))).toBe("");
   });
   it("getLineTextBefore middle", () => {
-    expect(getLineTextBefore(model, new monaco.Position(4, 10))).toBe("    const");
+    expect(getLineTextBefore(model, new monaco.Position(4, 10))).toBe(
+      "    const"
+    );
   });
 });
 
-
-describe('alphabet', ()=> {
-  it('alphabet a to z', () => {
-    expect(alphabet('a', 'z').length).toBe(26)
-  })
-})
+describe("alphabet", () => {
+  it("alphabet a to z", () => {
+    expect(alphabet("a", "z").length).toBe(26);
+  });
+});

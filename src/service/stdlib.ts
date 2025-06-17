@@ -24,7 +24,11 @@ class Stdlib {
     )
       .then((body) => {
         if (body?.tree) {
-          this.modules = (body as any).tree;
+          this.modules =
+            (body as any).tree?.map((item: any) => ({
+              ...item,
+              path: item.path.replace(/^stdlib\//, ""),
+            })) || [];
         }
         return this.modules;
       })

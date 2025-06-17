@@ -1,4 +1,4 @@
-import {
+import type {
   editor,
   Position,
   languages,
@@ -13,6 +13,7 @@ import {
   parseCallExpression,
 } from "../utils";
 import AbstractCompletion from "./AbstractCompletion";
+import { getMonacoInstance } from "../../monaco";
 
 class CallableSpriteCompletion extends AbstractCompletion {
   async isMatch(model: editor.ITextModel, position: Position) {
@@ -42,23 +43,27 @@ class CallableSpriteCompletion extends AbstractCompletion {
     context: languages.CompletionContext,
     token: CancellationToken
   ): Promise<languages.ProviderResult<languages.CompletionList>> {
+    const _monaco = getMonacoInstance();
     const puml = getPlantUMLContent(model, position);
     const sprites = await this.service.findSpriteSymbols(puml);
     const match = findPreviousMatch(model, position, /=|\s|,/);
     const startPos = match
-      ? new Position(match.range.startLineNumber, match.range.startColumn + 1)
+      ? new _monaco.Position(
+          match.range.startLineNumber,
+          match.range.startColumn + 1
+        )
       : position;
-    const range = new Range(
+    const range = new _monaco.Range(
       startPos.lineNumber,
       startPos.column,
       position.lineNumber,
       position.column
     );
-    
+
     return {
       suggestions: buildCompletionItems(
         sprites.map((sprite) => JSON.stringify(sprite)),
-        languages.CompletionItemKind.Color,
+        _monaco.languages.CompletionItemKind.Color,
         range
       ),
     };

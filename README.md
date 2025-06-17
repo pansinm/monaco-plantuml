@@ -15,7 +15,9 @@ yarn add @sinm/monaco-plantuml
 ## Usage
 
 ```ts
-import { PUmlExtension } from '@sinm/monaco-plantuml';
+import { PUmlExtension, setMonacoInstance } from '@sinm/monaco-plantuml';
+
+setMonacoInstance(monaco);
 
 const extension = new PUmlExtension();
 

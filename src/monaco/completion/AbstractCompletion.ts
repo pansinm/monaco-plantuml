@@ -1,4 +1,4 @@
-import * as monaco from "monaco-editor";
+import type * as monaco from "monaco-editor";
 import { PUmlService } from "../../service";
 
 abstract class AbstractCompletion {
@@ -7,7 +7,10 @@ abstract class AbstractCompletion {
     this.service = service;
   }
 
-  isMatch(model: monaco.editor.ITextModel, position: monaco.Position): boolean | Promise<boolean> {
+  isMatch(
+    model: monaco.editor.ITextModel,
+    position: monaco.Position
+  ): boolean | Promise<boolean> {
     throw new Error("Not implement yet!");
   }
 

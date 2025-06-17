@@ -1,21 +1,24 @@
 import PUmlFile from "../PUmlFile";
 import fetch from "node-fetch";
+import stdlib from "../stdlib";
 
 jest.mock(
   "dexie",
   () =>
     class {
-      files:any;
+      files: any;
       constructor() {}
       version() {
-        return { stores: () => {
-          this.files = {
-            add(){},
-            get() {
-              return null
-            }
-          }
-        } };
+        return {
+          stores: () => {
+            this.files = {
+              add() {},
+              get() {
+                return null;
+              },
+            };
+          },
+        };
       }
     } as any
 );
@@ -38,6 +41,7 @@ Group(group, "动机元素") {
 const file = PUmlFile.create(puml);
 
 beforeAll(async () => {
+  await stdlib.resolve();
   window.fetch = fetch as any;
   await file.parse();
 }, 10000);
@@ -55,6 +59,7 @@ it("find arguments", async () => {
 });
 
 it("find callable node", () => {
+  // console.log(JSON.stringify(file.ast, null, 2));
   expect(file.findCallableNode("Motivation_Assessment")?.name.name).toBe(
     "Motivation_Assessment"
   );

@@ -1,9 +1,13 @@
-import * as monaco from "monaco-editor";
-import { buildCompletionItems, getFenceContent, getLineTextBefore } from "../utils";
+import type * as monaco from "monaco-editor";
+import {
+  buildCompletionItems,
+  getFenceContent,
+  getLineTextBefore,
+} from "../utils";
 import AbstractCompletion from "./AbstractCompletion";
+import { getMonacoInstance } from "../../monaco";
 
 class NormalSpriteCompletion extends AbstractCompletion {
-
   isMatch(model: monaco.editor.ITextModel, position: monaco.Position) {
     const lineTextBefore = getLineTextBefore(model, position);
     return /\<\$[0-9a-zA-Z]*$/.test(lineTextBefore);
@@ -15,6 +19,7 @@ class NormalSpriteCompletion extends AbstractCompletion {
     context: monaco.languages.CompletionContext,
     token: monaco.CancellationToken
   ): Promise<monaco.languages.ProviderResult<monaco.languages.CompletionList>> {
+    const _monaco = getMonacoInstance();
     const puml =
       model.getLanguageId() === "markdown"
         ? getFenceContent(model, position)
@@ -30,7 +35,7 @@ class NormalSpriteCompletion extends AbstractCompletion {
     );
     if (findMatch?.range) {
       const { startLineNumber, startColumn } = findMatch.range;
-      const range = new monaco.Range(
+      const range = new _monaco.Range(
         startLineNumber,
         startColumn + 1,
         position.lineNumber,
@@ -39,7 +44,7 @@ class NormalSpriteCompletion extends AbstractCompletion {
       return {
         suggestions: buildCompletionItems(
           sprites,
-          monaco.languages.CompletionItemKind.Color,
+          _monaco.languages.CompletionItemKind.Color,
           range
         ),
       };

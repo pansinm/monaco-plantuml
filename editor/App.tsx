@@ -1,8 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as monaco from "monaco-editor";
-import { PUmlExtension } from "../src";
+import { PUmlExtension, setMonacoInstance } from "../src";
 
 const plantumlEncoder = require("plantuml-encoder");
+
+setMonacoInstance(monaco);
 
 function App() {
   const editorRef = useRef<HTMLDivElement>(null);

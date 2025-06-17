@@ -36,8 +36,8 @@ class PUmlFile {
     if (this.cache[url]) {
       return this.cache[url];
     }
-    const content = await getJson(url)
-      .then((body) => body.content);
+    const content = await getJson(url).then((body) => body.content);
+    // console.log("fetching PUmlFile", url, content);
     return PUmlFile.create(atob(content), url);
   }
 
